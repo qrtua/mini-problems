@@ -1,7 +1,7 @@
 # Mini-Problems Pipeline
 
 Pipeline do generowania, rozwiązywania i ewaluacji mini-problemów kreatywności.
-Zbudowany na wzorcu `run_reg.py` — używa **vLLM** do inference i **Hydra** do konfiguracji.
+Zbudowany na wzorcu `run_reg.py` — używa **vLLM** do inferencji i **Hydra** do konfiguracji.
 
 ## Struktura projektu
 
