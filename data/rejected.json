@@ -1,0 +1,98 @@
+[
+  {
+    "id": 14,
+    "problem": "To cool your foot down without an icepack",
+    "ordinary_solution": "Frozen vegetables",
+    "creative_solution": "A frozen sponge",
+    "ai_implausible": "A metal spoon",
+    "rejection_reason": "Knowledge-based problem (cooling = memorized trick); AI implausible 'metal spoon' could actually work via thermal conductivity"
+  },
+  {
+    "id": 16,
+    "problem": "To create a makeshift funnel for water",
+    "ordinary_solution": "Rolled paper",
+    "creative_solution": "A cut bottle",
+    "ai_implausible": "A plastic bag",
+    "rejection_reason": "Knowledge-based (making a funnel is a common life-hack); AI implausible 'plastic bag' could be shaped into a funnel"
+  },
+  {
+    "id": 50,
+    "problem": "To hold a taco together while eating",
+    "ordinary_solution": "A lettuce wrap",
+    "creative_solution": "A holder",
+    "ai_implausible": "A napkin",
+    "rejection_reason": "Missing constraint; creative solution 'a holder' is too ordinary; AI implausible 'a napkin' could actually wrap a taco"
+  },
+  {
+    "id": 53,
+    "problem": "To keep a bandage on in a tricky spot",
+    "ordinary_solution": "Medical tape",
+    "creative_solution": "A liquid bandage",
+    "ai_implausible": "A sock",
+    "rejection_reason": "Knowledge-based (bandage care); missing clear constraint; AI implausible 'a sock' could hold bandage in place"
+  },
+  {
+    "id": 70,
+    "problem": "To secure a poster without tacks or tape",
+    "ordinary_solution": "Mounting putty",
+    "creative_solution": "Staples",
+    "ai_implausible": "Toothpaste",
+    "rejection_reason": "Creative solution 'staples' is too ordinary/common; not a secondary-feature solution"
+  },
+  {
+    "id": 74,
+    "problem": "To prevent a shirt button from falling off",
+    "ordinary_solution": "Clear nail polish",
+    "creative_solution": "Dental floss",
+    "ai_implausible": "A small wire",
+    "rejection_reason": "Knowledge-based (button reinforcement); AI implausible 'a small wire' could reinforce a button thread"
+  },
+  {
+    "id": 86,
+    "problem": "To create an emergency light source",
+    "ordinary_solution": "A candle",
+    "creative_solution": "A flashlight",
+    "ai_implausible": "A phone screen",
+    "rejection_reason": "Knowledge-based (emergency lighting); creative 'flashlight' IS the ordinary solution; AI implausible 'phone screen' IS a light source"
+  },
+  {
+    "id": 87,
+    "problem": "To make a makeshift bandage",
+    "ordinary_solution": "A clean cloth",
+    "creative_solution": "A paper towel",
+    "ai_implausible": "A piece of tape",
+    "rejection_reason": "Knowledge-based (first aid); creative 'paper towel' is too ordinary; AI implausible 'tape' IS used in bandaging"
+  },
+  {
+    "id": 90,
+    "problem": "To get rid of fruit flies",
+    "ordinary_solution": "A vinegar trap",
+    "creative_solution": "A piece of fruit",
+    "ai_implausible": "A flyswatter",
+    "rejection_reason": "Knowledge-based (pest control = memorized trick); missing constraint"
+  },
+  {
+    "id": 91,
+    "problem": "To clear a car's cloudy headlights",
+    "ordinary_solution": "A restoration kit",
+    "creative_solution": "Toothpaste",
+    "ai_implausible": "Bug spray",
+    "rejection_reason": "Knowledge-based (car maintenance = specialized knowledge); missing constraint"
+  },
+  {
+    "id": 104,
+    "problem": "To create a small, temporary trash bin",
+    "ordinary_solution": "A plastic bag",
+    "creative_solution": "A cardboard box",
+    "ai_implausible": "A hat",
+    "rejection_reason": "Creative 'cardboard box' is too ordinary; weak problem overall"
+  },
+  {
+    "id": 112,
+    "problem": "To make a temporary out of order\" sign...\"",
+    "ordinary_solution": "A piece of paper",
+    "creative_solution": "A piece of tape",
+    "ai_implausible": "A chair",
+    "rejection_reason": "Problem is about creating text/sign, not physical manipulation; creative 'tape' is ordinary"
+  }
+]

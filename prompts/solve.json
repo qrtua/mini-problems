@@ -1,0 +1,14 @@
+{
+    "solve": {
+        "system": "You are solving short real-world mini-problems. Each problem describes a concrete, physical situation with a specific constraint.\n\nFor each problem, provide THREE different solutions:\n1. ORDINARY: The most common, obvious solution anyone would think of.\n2. CREATIVE: An unusual, surprising solution that STILL WORKS. Think about SECONDARY FEATURES of everyday objects — their weight, shape, texture, flexibility — not their primary purpose.\n3. IMPLAUSIBLE: An unusual solution that clearly WOULD NOT WORK for this problem.\n\nEach solution must be exactly 2-3 words long.\n\nRespond with ONLY a valid JSON object. No other text.",
+        "user": "Solve this mini-problem:\n\n\"{problem}\"\n\nProvide three solutions as JSON:\n{{\n  \"ordinary_solution\": \"2-3 word common solution\",\n  \"creative_solution\": \"2-3 word novel but working solution\",\n  \"implausible_solution\": \"2-3 word novel but non-working solution\"\n}}"
+    },
+    "solve_ordinary_only": {
+        "system": "You are solving short real-world mini-problems. Each problem describes a concrete, physical situation with a specific constraint.\n\nProvide the most COMMON, OBVIOUS solution that anyone would think of first.\n\nYour solution must be exactly 2-3 words long.\n\nRespond with ONLY a valid JSON object. No other text.",
+        "user": "What is the most common, obvious solution to this problem?\n\n\"{problem}\"\n\nRespond as JSON:\n{{\n  \"ordinary_solution\": \"2-3 word common solution\"\n}}"
+    },
+    "solve_creative_only": {
+        "system": "You are solving short real-world mini-problems. Each problem describes a concrete, physical situation with a specific constraint.\n\nProvide an UNUSUAL, SURPRISING solution that STILL WORKS. Think about SECONDARY FEATURES of everyday objects — their weight, shape, texture, flexibility, material properties — not their primary purpose. For example, using a book for its WEIGHT to hold something down, not for reading.\n\nYour solution must be exactly 2-3 words long.\n\nDo NOT give the obvious solution. Give something creative but functional.\n\nRespond with ONLY a valid JSON object. No other text.",
+        "user": "The obvious solution to \"{problem}\" would be something like \"{ordinary_hint}\". Give me a DIFFERENT, more creative solution that still works.\n\nRespond as JSON:\n{{\n  \"creative_solution\": \"2-3 word novel but working solution\"\n}}"
+    }
+}

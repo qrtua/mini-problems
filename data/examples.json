@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "problem": "To seal a non-sticky envelope",
+    "ordinary_solution": "Tape",
+    "creative_solution": "Nail polish",
+    "implausible_solution": "oil"
+  },
+  {
+    "id": 2,
+    "problem": "To remove a stubborn jar lid",
+    "ordinary_solution": "A towel",
+    "creative_solution": "Duct tape",
+    "implausible_solution": "washing machine"
+  },
+  {
+    "id": 3,
+    "problem": "To keep my pants from slipping without a belt",
+    "ordinary_solution": "A safety pin",
+    "creative_solution": "A shoelace",
+    "implausible_solution": ""
+  },
+  {
+    "id": 4,
+    "problem": "To reach something high without a ladder",
+    "ordinary_solution": "A chair",
+    "creative_solution": "Tongs",
+    "implausible_solution": ""
+  },
+  {
+    "id": 5,
+    "problem": "To stop a door from slamming in the wind",
+    "ordinary_solution": "A wedge",
+    "creative_solution": "A shoe",
+    "implausible_solution": ""
+  },
+  {
+    "id": 6,
+    "problem": "To keep a page open in a book while cooking",
+    "ordinary_solution": "A mug",
+    "creative_solution": "A pants hanger",
+    "implausible_solution": ""
+  },
+  {
+    "id": 7,
+    "problem": "To keep my shoes dry in unexpected rain",
+    "ordinary_solution": "An umbrella",
+    "creative_solution": "Plastic bags",
+    "implausible_solution": ""
+  },
+  {
+    "id": 28,
+    "problem": "To make a makeshift pillow when traveling",
+    "ordinary_solution": "A jacket",
+    "creative_solution": "A backpack",
+    "implausible_solution": ""
+  },
+  {
+    "id": 29,
+    "problem": "To protect my hands from a hot cup",
+    "ordinary_solution": "A napkin",
+    "creative_solution": "A sleeve",
+    "implausible_solution": ""
+  },
+  {
+    "id": 30,
+    "problem": "To make a surface less slippery",
+    "ordinary_solution": "A mat",
+    "creative_solution": "A towel",
+    "implausible_solution": ""
+  },
+  {
+    "id": 31,
+    "problem": "To scoop something when you don't have a spoon",
+    "ordinary_solution": "A cup",
+    "creative_solution": "A lid",
+    "implausible_solution": ""
+  }
+]

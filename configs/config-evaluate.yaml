@@ -1,0 +1,47 @@
+# ============================================================
+# Config for run_evaluate.py — Mini-Problem Evaluator
+# ============================================================
+# Usage:
+#   python run_evaluate.py                                     # defaults
+#   python run_evaluate.py model=llama3-70b                    # bigger evaluator
+#   python run_evaluate.py eval_mode=classify                  # classify solutions
+# ============================================================
+
+seed: 42
+
+defaults:
+  - model: qwen2.5-7b
+
+prompt_config_path: prompts/evaluate.json
+
+# --- Evaluator settings ---
+eval_mode: batch  # "batch" | "feasibility" | "classify"
+
+# --- Data paths ---
+data:
+  input_path: solved_problems.csv
+  examples_path: data/examples.json
+
+# --- Sampling parameters ---
+sampling_params:
+  temperature: 0.1
+  top_p: 0.95
+  max_tokens: 512
+  n: 1
+
+# --- Validation ---
+validation:
+  problem_min_words: 4
+  problem_max_words: 9
+  solution_min_words: 1
+  solution_max_words: 3
+
+# --- Output ---
+output:
+  filename: evaluated_problems.csv
+
+# --- W&B ---
+wandb:
+  project: mini-problems
+  run_name: evaluate-${model.name}
+  job_type: evaluation

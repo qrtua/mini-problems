@@ -1,0 +1,53 @@
+# ============================================================
+# Config for run_generate.py — Mini-Problem Generator
+# ============================================================
+# Usage:
+#   python run_generate.py                          # defaults (llama3-8b)
+#   python run_generate.py model=llama3-70b         # override model
+#   python run_generate.py n_problems=50            # generate 50 problems
+# ============================================================
+
+seed: 42
+
+# --- Model (defaults, overridden by configs/model/*.yaml) ---
+defaults:
+  - model: qwen2.5-7b
+
+# --- Prompt configuration ---
+prompt_config_path: prompts/generate.json
+
+# --- Generation settings ---
+n_problems: 20
+batch_size: 5
+n_examples: 5
+use_rejected: true
+
+# --- Data paths ---
+data:
+  examples_path: data/examples.json
+  rejected_path: data/rejected.json
+
+# --- Sampling parameters (passed to vLLM SamplingParams) ---
+sampling_params:
+  temperature: 0.8
+  top_p: 0.95
+  max_tokens: 2048
+  n: 1
+
+# --- Validation (Chain of Verification) ---
+validation:
+  problem_min_words: 4
+  problem_max_words: 9
+  solution_min_words: 1
+  solution_max_words: 3
+  max_retries: 2
+
+# --- Output ---
+output:
+  filename: generated_problems.csv
+
+# --- Weights & Biases (optional) ---
+wandb:
+  project: mini-problems
+  run_name: generate-${model.name}
+  job_type: generation
