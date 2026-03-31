@@ -249,6 +249,231 @@ class DataHandler:
 
 
 # ---------------------------------------------------------------------------
+# Diversity: Deduplication Buffer + Semantic Similarity Filter
+# ---------------------------------------------------------------------------
+
+# Common filler words to ignore when extracting keywords
+_STOPWORDS = {
+    "a", "an", "the", "to", "in", "on", "of", "for", "with", "without",
+    "from", "by", "at", "is", "it", "my", "your", "when", "while",
+    "and", "or", "not", "no", "that", "this", "its", "their", "you",
+    "don't", "doesn't", "do", "does", "be", "been", "being", "have",
+    "has", "had", "something", "someone", "things",
+}
+
+
+def _extract_keywords(text: str) -> set:
+    """Extract content words from text, ignoring stopwords."""
+    words = re.sub(r'[^a-z\s]', '', text.lower()).split()
+    return {w for w in words if w not in _STOPWORDS and len(w) > 2}
+
+
+def _extract_verb(problem: str) -> str:
+    """Extract the main verb from a problem (first word after 'To')."""
+    core = problem.strip()
+    if core.lower().startswith("to "):
+        core = core[3:].strip()
+    words = core.split()
+    return words[0].lower() if words else ""
+
+
+def _extract_object(problem: str) -> str:
+    """
+    Heuristic: extract the main object from a problem.
+    Looks for nouns after articles (a/an/the) or after the verb.
+    """
+    core = problem.strip().lower()
+    if core.startswith("to "):
+        core = core[3:].strip()
+    words = core.split()
+    # Skip verb, look for first content word after article
+    for i, w in enumerate(words[1:], 1):
+        if w in ("a", "an", "the", "my", "your") and i + 1 < len(words):
+            return words[i + 1]
+    # Fallback: second word
+    return words[1] if len(words) > 1 else ""
+
+
+class DuplicateTracker:
+    """
+    Two-layer deduplication for generated mini-problems:
+
+    Layer 1 — Keyword Dedup Buffer:
+        Tracks verbs, objects, and full keyword sets of generated problems.
+        Provides a text summary for injection into the prompt so the model
+        knows what to avoid.
+
+    Layer 2 — Semantic Similarity Filter:
+        Uses sentence-transformers to compute embeddings and reject problems
+        that are too similar (cosine similarity > threshold) to existing ones.
+        Falls back gracefully if sentence-transformers is not installed.
+    """
+
+    def __init__(self, similarity_threshold: float = 0.75, embed_model: str = "all-MiniLM-L6-v2"):
+        self.similarity_threshold = similarity_threshold
+
+        # Layer 1: keyword tracking
+        self.used_problems: List[str] = []
+        self.used_verbs: Dict[str, int] = {}
+        self.used_objects: Dict[str, int] = {}
+        self.used_keywords: List[set] = []
+
+        # Layer 2: semantic embeddings
+        self.embeddings: List[np.ndarray] = []
+        self.encoder = None
+        self._embed_available = False
+
+        try:
+            from sentence_transformers import SentenceTransformer
+            log.info(f"Loading embedding model: {embed_model}")
+            self.encoder = SentenceTransformer(embed_model)
+            self._embed_available = True
+            log.info("Semantic similarity filter: ENABLED")
+        except ImportError:
+            log.warning(
+                "sentence-transformers not installed — semantic similarity filter DISABLED. "
+                "Install with: pip install sentence-transformers"
+            )
+
+    def _encode(self, text: str) -> Optional[np.ndarray]:
+        """Encode a text string to an embedding vector."""
+        if not self._embed_available:
+            return None
+        return self.encoder.encode(text, normalize_embeddings=True)
+
+    def _max_cosine_similarity(self, embedding: np.ndarray) -> float:
+        """Compute max cosine similarity between embedding and all stored embeddings."""
+        if not self.embeddings:
+            return 0.0
+        # Embeddings are already normalized, so dot product = cosine similarity
+        stored = np.stack(self.embeddings)
+        similarities = stored @ embedding
+        return float(similarities.max())
+
+    def add(self, problem: str) -> None:
+        """Register a problem as 'used' in both layers."""
+        problem = problem.strip()
+        self.used_problems.append(problem)
+
+        # Layer 1: keywords
+        verb = _extract_verb(problem)
+        obj = _extract_object(problem)
+        keywords = _extract_keywords(problem)
+
+        self.used_verbs[verb] = self.used_verbs.get(verb, 0) + 1
+        self.used_objects[obj] = self.used_objects.get(obj, 0) + 1
+        self.used_keywords.append(keywords)
+
+        # Layer 2: embedding
+        emb = self._encode(problem)
+        if emb is not None:
+            self.embeddings.append(emb)
+
+    def check_duplicate(self, problem: str) -> Dict:
+        """
+        Check if a problem is too similar to existing ones.
+
+        Returns:
+            {
+                "is_duplicate": bool,
+                "reason": str or None,
+                "keyword_overlap": float,  # 0-1
+                "semantic_similarity": float,  # 0-1 (or -1 if unavailable)
+                "verb_count": int,  # how many times this verb was used
+                "object_count": int,  # how many times this object was used
+            }
+        """
+        problem = problem.strip()
+        verb = _extract_verb(problem)
+        obj = _extract_object(problem)
+        keywords = _extract_keywords(problem)
+
+        result = {
+            "is_duplicate": False,
+            "reason": None,
+            "keyword_overlap": 0.0,
+            "semantic_similarity": -1.0,
+            "verb_count": self.used_verbs.get(verb, 0),
+            "object_count": self.used_objects.get(obj, 0),
+        }
+
+        # --- Layer 1: Keyword overlap ---
+        if self.used_keywords:
+            max_overlap = 0.0
+            for used_kw in self.used_keywords:
+                if not keywords or not used_kw:
+                    continue
+                overlap = len(keywords & used_kw) / max(len(keywords | used_kw), 1)
+                max_overlap = max(max_overlap, overlap)
+            result["keyword_overlap"] = round(max_overlap, 3)
+
+            # Exact or near-exact keyword match
+            if max_overlap >= 0.8:
+                result["is_duplicate"] = True
+                result["reason"] = f"keyword_overlap={max_overlap:.2f} (>=0.80)"
+                return result
+
+        # --- Layer 2: Semantic similarity ---
+        emb = self._encode(problem)
+        if emb is not None and self.embeddings:
+            max_sim = self._max_cosine_similarity(emb)
+            result["semantic_similarity"] = round(max_sim, 3)
+
+            if max_sim >= self.similarity_threshold:
+                result["is_duplicate"] = True
+                result["reason"] = f"semantic_similarity={max_sim:.3f} (>={self.similarity_threshold})"
+                return result
+
+        # --- Soft warning: verb overuse ---
+        if self.used_verbs.get(verb, 0) >= 5:
+            result["reason"] = f"verb '{verb}' used {self.used_verbs[verb]} times (soft warning)"
+
+        return result
+
+    def get_exclusion_summary(self, max_items: int = 15) -> str:
+        """
+        Generate a text summary for prompt injection.
+        Lists the most-used verbs, objects, and recent problems to avoid.
+        """
+        if not self.used_problems:
+            return ""
+
+        lines = ["ALREADY GENERATED (do NOT repeat similar problems):"]
+
+        # Top overused verbs
+        top_verbs = sorted(self.used_verbs.items(), key=lambda x: -x[1])[:6]
+        overused_verbs = [f"'{v}' ({c}x)" for v, c in top_verbs if c >= 2]
+        if overused_verbs:
+            lines.append(f"Overused verbs: {', '.join(overused_verbs)}")
+
+        # Top overused objects
+        top_objs = sorted(self.used_objects.items(), key=lambda x: -x[1])[:6]
+        overused_objs = [f"'{o}' ({c}x)" for o, c in top_objs if c >= 2]
+        if overused_objs:
+            lines.append(f"Overused objects: {', '.join(overused_objs)}")
+
+        # Recent problems (show last N to avoid)
+        recent = self.used_problems[-max_items:]
+        lines.append(f"\nRecent problems ({len(recent)} of {len(self.used_problems)} total):")
+        for i, p in enumerate(recent, 1):
+            lines.append(f"  {i}. \"{p}\"")
+
+        return "\n".join(lines)
+
+    def get_stats(self) -> Dict:
+        """Return summary statistics about tracked problems."""
+        return {
+            "total_tracked": len(self.used_problems),
+            "unique_verbs": len(self.used_verbs),
+            "unique_objects": len(self.used_objects),
+            "top_verbs": sorted(self.used_verbs.items(), key=lambda x: -x[1])[:5],
+            "top_objects": sorted(self.used_objects.items(), key=lambda x: -x[1])[:5],
+            "embed_available": self._embed_available,
+            "similarity_threshold": self.similarity_threshold,
+        }
+
+
+# ---------------------------------------------------------------------------
 # Result logger (mirrors ResultLogger from run_reg.py)
 # ---------------------------------------------------------------------------
 

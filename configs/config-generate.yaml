@@ -2,9 +2,10 @@
 # Config for run_generate.py — Mini-Problem Generator
 # ============================================================
 # Usage:
-#   python run_generate.py                          # defaults (llama3-8b)
-#   python run_generate.py model=llama3-70b         # override model
+#   python run_generate.py                          # defaults
+#   python run_generate.py model=qwen2.5-14b        # bigger model
 #   python run_generate.py n_problems=50            # generate 50 problems
+#   python run_generate.py diversity.similarity_threshold=0.65  # stricter dedup
 # ============================================================
 
 seed: 42
@@ -33,6 +34,17 @@ sampling_params:
   top_p: 0.95
   max_tokens: 2048
   n: 1
+
+# --- Diversity control (anti-redundancy) ---
+diversity:
+  # Semantic similarity threshold: problems above this cosine similarity are rejected
+  # Lower = stricter (more diverse), higher = more lenient
+  # Recommended: 0.75 for first 100, then lower to 0.65 for 100-300
+  similarity_threshold: 0.75
+  # Sentence-transformers model for embeddings (~80MB, auto-downloaded)
+  embed_model: all-MiniLM-L6-v2
+  # How many recent problems to show in the exclusion prompt
+  max_exclusion_items: 15
 
 # --- Validation (Chain of Verification) ---
 validation:
