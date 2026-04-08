@@ -4,76 +4,895 @@
     "problem": "To seal a non-sticky envelope",
     "ordinary_solution": "Tape",
     "creative_solution": "Nail polish",
-    "implausible_solution": "oil"
+    "implausible_solution": "oil",
+    "ai_implausible_failed": "Honey (plausible)"
   },
   {
     "id": 2,
     "problem": "To remove a stubborn jar lid",
     "ordinary_solution": "A towel",
     "creative_solution": "Duct tape",
-    "implausible_solution": "washing machine"
+    "implausible_solution": "washing machine",
+    "ai_implausible_failed": "A hammer (perfect solution)"
   },
   {
     "id": 3,
     "problem": "To keep my pants from slipping without a belt",
     "ordinary_solution": "A safety pin",
     "creative_solution": "A shoelace",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of string"
   },
   {
     "id": 4,
     "problem": "To reach something high without a ladder",
     "ordinary_solution": "A chair",
     "creative_solution": "Tongs",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A broom"
   },
   {
     "id": 5,
     "problem": "To stop a door from slamming in the wind",
     "ordinary_solution": "A wedge",
     "creative_solution": "A shoe",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A pillow"
   },
   {
     "id": 6,
     "problem": "To keep a page open in a book while cooking",
     "ordinary_solution": "A mug",
     "creative_solution": "A pants hanger",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
   },
   {
     "id": 7,
     "problem": "To keep my shoes dry in unexpected rain",
     "ordinary_solution": "An umbrella",
     "creative_solution": "Plastic bags",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "Paper towels"
+  },
+  {
+    "id": 9,
+    "problem": "To fix a wobbly table in a cafe",
+    "ordinary_solution": "A folded napkin",
+    "creative_solution": "A coin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Chewing gum"
+  },
+  {
+    "id": 10,
+    "problem": "To keep a bag of chips closed without a clip",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "A spring clip",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A paperclip"
+  },
+  {
+    "id": 11,
+    "problem": "To mark my spot in a book without a bookmark",
+    "ordinary_solution": "piece of paper",
+    "creative_solution": "A dollar bill",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A coin"
+  },
+  {
+    "id": 13,
+    "problem": "To create a makeshift speaker for a phone",
+    "ordinary_solution": "A bowl",
+    "creative_solution": "A paper tube",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A pillow"
+  },
+  {
+    "id": 15,
+    "problem": "To block a draft coming from under a door",
+    "ordinary_solution": "A towel",
+    "creative_solution": "A pool noodle",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A row of books"
+  },
+  {
+    "id": 17,
+    "problem": "To fix a broken shoelace temporarily",
+    "ordinary_solution": "A knot",
+    "creative_solution": "A bread clip",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 18,
+    "problem": "To protect your fingers while hammering a small nail",
+    "ordinary_solution": "Pliers",
+    "creative_solution": "A comb",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A marshmallow"
+  },
+  {
+    "id": 19,
+    "problem": "To find something small I dropped on the floor",
+    "ordinary_solution": "A flashlight",
+    "creative_solution": "A stocking",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A magnet"
+  },
+  {
+    "id": 20,
+    "problem": "To create a makeshift coaster",
+    "ordinary_solution": "A folded napkin",
+    "creative_solution": "A phone case",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A slice of bread"
+  },
+  {
+    "id": 22,
+    "problem": "To wrap a gift without wrapping paper",
+    "ordinary_solution": "",
+    "creative_solution": "A scarf",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Aluminum foil"
+  },
+  {
+    "id": 23,
+    "problem": "To remove pet hair from clothing",
+    "ordinary_solution": "A lint roller",
+    "creative_solution": "A rubber glove",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hand"
+  },
+  {
+    "id": 24,
+    "problem": "To keep my bag off the floor in a restaurant",
+    "ordinary_solution": "A bag hook",
+    "creative_solution": "The chair",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of string"
+  },
+  {
+    "id": 25,
+    "problem": "To write something down when I don't have paper",
+    "ordinary_solution": "Your hand",
+    "creative_solution": "A napkin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A leaf"
+  },
+  {
+    "id": 26,
+    "problem": "To hang something on the wall without nails",
+    "ordinary_solution": "Adhesive hooks",
+    "creative_solution": "Mounting putty",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Double-sided tape"
+  },
+  {
+    "id": 27,
+    "problem": "To keep a cable from sliding off the desk",
+    "ordinary_solution": "A spring clip",
+    "creative_solution": "piece of tape",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A heavy book"
   },
   {
     "id": 28,
     "problem": "To make a makeshift pillow when traveling",
     "ordinary_solution": "A jacket",
     "creative_solution": "A backpack",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hands"
   },
   {
     "id": 29,
     "problem": "To protect my hands from a hot cup",
     "ordinary_solution": "A napkin",
     "creative_solution": "A sleeve",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A second cup"
   },
   {
     "id": 30,
     "problem": "To make a surface less slippery",
     "ordinary_solution": "A mat",
     "creative_solution": "A towel",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "Sand"
   },
   {
     "id": 31,
     "problem": "To scoop something when you don't have a spoon",
     "ordinary_solution": "A cup",
     "creative_solution": "A lid",
-    "implausible_solution": ""
+    "implausible_solution": "",
+    "ai_implausible_failed": "A folded piece of paper"
+  },
+  {
+    "id": 32,
+    "problem": "To carry a hot pot with no oven mitts",
+    "ordinary_solution": "A towel",
+    "creative_solution": "A potholder",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Folded newspaper"
+  },
+  {
+    "id": 33,
+    "problem": "To measure ingredients without measuring cups",
+    "ordinary_solution": "A mug",
+    "creative_solution": "A spoon",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hand"
+  },
+  {
+    "id": 34,
+    "problem": "To keep a tablecloth from blowing away outside",
+    "ordinary_solution": "Clips",
+    "creative_solution": "Weights",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Rocks"
+  },
+  {
+    "id": 36,
+    "problem": "To keep a rug corner from curling up",
+    "ordinary_solution": "Rug tape",
+    "creative_solution": "Furniture",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A heavy book"
+  },
+  {
+    "id": 37,
+    "problem": "To pack a wet swimsuit for travel",
+    "ordinary_solution": "A plastic bag",
+    "creative_solution": "A shower cap",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A towel"
+  },
+  {
+    "id": 38,
+    "problem": "To remove scuff marks from a floor",
+    "ordinary_solution": "An eraser",
+    "creative_solution": "A tennis ball",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Toothpaste"
+  },
+  {
+    "id": 39,
+    "problem": "To keep a straw from floating up in a can",
+    "ordinary_solution": "The can tab",
+    "creative_solution": "A clothespin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A heavy spoon"
+  },
+  {
+    "id": 40,
+    "problem": "To remove a broken light bulb from a socket",
+    "ordinary_solution": "Pliers",
+    "creative_solution": "A potato",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 41,
+    "problem": "To secure a loose battery in a remote",
+    "ordinary_solution": "Folded foil",
+    "creative_solution": "A spring",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A small coin"
+  },
+  {
+    "id": 42,
+    "problem": "To protect a phone screen without a screen protector",
+    "ordinary_solution": "A case",
+    "creative_solution": "A sock",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Plastic wrap"
+  },
+  {
+    "id": 43,
+    "problem": "To fix a snag in a sweater",
+    "ordinary_solution": "A needle",
+    "creative_solution": "A bobby pin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A paperclip"
+  },
+  {
+    "id": 45,
+    "problem": "To prevent a trash bag from slipping into the can",
+    "ordinary_solution": "A knot",
+    "creative_solution": "large rubber band",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Spring clips"
+  },
+  {
+    "id": 46,
+    "problem": "To prop open a laptop for better airflow",
+    "ordinary_solution": "A book",
+    "creative_solution": "Bottle caps",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Two erasers"
+  },
+  {
+    "id": 47,
+    "problem": "To get candle wax out of a jar",
+    "ordinary_solution": "Freeze it",
+    "creative_solution": "Heat it",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Boiling water"
+  },
+  {
+    "id": 48,
+    "problem": "To keep ants out of a pet food bowl",
+    "ordinary_solution": "A water moat",
+    "creative_solution": "A chalk line",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Petroleum jelly"
+  },
+  {
+    "id": 49,
+    "problem": "To prevent a necklace chain from tangling",
+    "ordinary_solution": "A small bag",
+    "creative_solution": "A straw",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A toilet paper roll"
+  },
+  {
+    "id": 51,
+    "problem": "To keep shoelaces from untying",
+    "ordinary_solution": "A double knot",
+    "creative_solution": "Tuck them in",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A drop of glue"
+  },
+  {
+    "id": 52,
+    "problem": "To create a makeshift tripod for a camera",
+    "ordinary_solution": "stack of books",
+    "creative_solution": "Hanging",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A bottle"
+  },
+  {
+    "id": 54,
+    "problem": "To get sand off your skin after the beach",
+    "ordinary_solution": "A towel",
+    "creative_solution": "Baby powder",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hand"
+  },
+  {
+    "id": 55,
+    "problem": "To organize cables behind a desk",
+    "ordinary_solution": "Zip ties",
+    "creative_solution": "Spring clips",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Toilet paper rolls"
+  },
+  {
+    "id": 56,
+    "problem": "To make a makeshift fork",
+    "ordinary_solution": "Two sticks",
+    "creative_solution": "A comb",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A paperclip"
+  },
+  {
+    "id": 57,
+    "problem": "To keep a window from rattling",
+    "ordinary_solution": "Weather stripping",
+    "creative_solution": "A cardboard wedge",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A rolled sock"
+  },
+  {
+    "id": 58,
+    "problem": "To prop up a tablet for viewing",
+    "ordinary_solution": "A stand",
+    "creative_solution": "A book",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A coffee mug"
+  },
+  {
+    "id": 60,
+    "problem": "To protect a cast from getting wet in the shower",
+    "ordinary_solution": "A cast cover",
+    "creative_solution": "A plastic bag",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Plastic wrap"
+  },
+  {
+    "id": 61,
+    "problem": "To clean the inside of a bottle",
+    "ordinary_solution": "A bottle brush",
+    "creative_solution": "Rice",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Sand"
+  },
+  {
+    "id": 62,
+    "problem": "To make a temporary phone stand",
+    "ordinary_solution": "A wallet",
+    "creative_solution": "Play dough",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A spring clip"
+  },
+  {
+    "id": 63,
+    "problem": "To prevent cheese from sticking to a grater",
+    "ordinary_solution": "Cooking spray",
+    "creative_solution": "Freeze the cheese",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Flour"
+  },
+  {
+    "id": 65,
+    "problem": "To stop a pen from smudging on your hand",
+    "ordinary_solution": "Blotter paper",
+    "creative_solution": "A tissue",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Hairspray"
+  },
+  {
+    "id": 66,
+    "problem": "To make a temporary car air freshener",
+    "ordinary_solution": "A dryer sheet",
+    "creative_solution": "A cotton ball",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A tea bag"
+  },
+  {
+    "id": 67,
+    "problem": "To protect a document from creasing in a bag",
+    "ordinary_solution": "A folder",
+    "creative_solution": "A book",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A rolled tube"
+  },
+  {
+    "id": 72,
+    "problem": "To get water out of your ear",
+    "ordinary_solution": "Tilt your head",
+    "creative_solution": "Hair dryer",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A cotton swab"
+  },
+  {
+    "id": 73,
+    "problem": "To measure a small amount of liquid",
+    "ordinary_solution": "A spoon",
+    "creative_solution": "A bottle cap",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your cupped hand"
+  },
+  {
+    "id": 75,
+    "problem": "To temporarily fix a loose glasses screw",
+    "ordinary_solution": "A toothpick",
+    "creative_solution": "A tiny piece",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A small piece of paper"
+  },
+  {
+    "id": 76,
+    "problem": "To clean a keyboard",
+    "ordinary_solution": "Compressed air",
+    "creative_solution": "A brush",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A sticky note"
+  },
+  {
+    "id": 77,
+    "problem": "To remove a sticker from a surface",
+    "ordinary_solution": "Oil",
+    "creative_solution": "A hairdryer",
+    "implausible_solution": "",
+    "ai_implausible_failed": "An eraser"
+  },
+  {
+    "id": 78,
+    "problem": "To separate egg yolks from whites",
+    "ordinary_solution": "The shell",
+    "creative_solution": "A plastic bottle",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hands"
+  },
+  {
+    "id": 79,
+    "problem": "To keep paint from getting on a window pane",
+    "ordinary_solution": "Masking tape",
+    "creative_solution": "Petroleum jelly",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Lip balm"
+  },
+  {
+    "id": 80,
+    "problem": "To make a plant water itself on vacation",
+    "ordinary_solution": "A wick system",
+    "creative_solution": "An inverted bottle",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A plastic bag"
+  },
+  {
+    "id": 84,
+    "problem": "To remove a splinter",
+    "ordinary_solution": "A needle",
+    "creative_solution": "Tape",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of glue"
+  },
+  {
+    "id": 85,
+    "problem": "To remove a ring that is stuck",
+    "ordinary_solution": "Soap",
+    "creative_solution": "Dental floss",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Butter"
+  },
+  {
+    "id": 88,
+    "problem": "To filter water in an emergency",
+    "ordinary_solution": "Boil it",
+    "creative_solution": "A cloth",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A coffee filter"
+  },
+  {
+    "id": 92,
+    "problem": "To keep a garden hose from kinking",
+    "ordinary_solution": "A hose reel",
+    "creative_solution": "A spring guard",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A straight path"
+  },
+  {
+    "id": 94,
+    "problem": "To anchor a beach umbrella",
+    "ordinary_solution": "A sand anchor",
+    "creative_solution": "A heavy bag",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A deep hole"
+  },
+  {
+    "id": 95,
+    "problem": "To keep a car cool without AC",
+    "ordinary_solution": "A sunshade",
+    "creative_solution": "Cracked windows",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A wet towel"
+  },
+  {
+    "id": 98,
+    "problem": "To remove a sticky bandage painlessly",
+    "ordinary_solution": "Oil",
+    "creative_solution": "Warm water",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Alcohol"
+  },
+  {
+    "id": 99,
+    "problem": "To deter a mosquito",
+    "ordinary_solution": "Insect repellent",
+    "creative_solution": "A fan",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A citronella candle"
+  },
+  {
+    "id": 101,
+    "problem": "To polish shoes without any shoe polish",
+    "ordinary_solution": "A shoe brush",
+    "creative_solution": "A banana peel",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Butter"
+  },
+  {
+    "id": 102,
+    "problem": "To insulate a single window for the winter",
+    "ordinary_solution": "Plastic film",
+    "creative_solution": "Bubble wrap",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Newspaper"
+  },
+  {
+    "id": 103,
+    "problem": "To stop a stack of books from falling over",
+    "ordinary_solution": "Bookends",
+    "creative_solution": "A heavy object",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A pillow"
+  },
+  {
+    "id": 105,
+    "problem": "To stop a bottle from rolling in a refrigerator",
+    "ordinary_solution": "A container",
+    "creative_solution": "A spring clip",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A small towel"
+  },
+  {
+    "id": 107,
+    "problem": "To make a temporary paint palette",
+    "ordinary_solution": "A paper plate",
+    "creative_solution": "piece of foil",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of glass"
+  },
+  {
+    "id": 108,
+    "problem": "To protect a surface from a hot glue gun",
+    "ordinary_solution": "A silicone mat",
+    "creative_solution": "A ceramic tile",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of paper"
+  },
+  {
+    "id": 109,
+    "problem": "To bundle a stack of firewood",
+    "ordinary_solution": "A rope",
+    "creative_solution": "A belt",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A plastic bag"
+  },
+  {
+    "id": 110,
+    "problem": "To protect a countertop from a hot pan",
+    "ordinary_solution": "A pot holder",
+    "creative_solution": "wooden cutting board",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A folded magazine"
+  },
+  {
+    "id": 113,
+    "problem": "To get a better grip on a tool handle",
+    "ordinary_solution": "Gloves",
+    "creative_solution": "A rubber band",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 114,
+    "problem": "To keep a small rug from slipping on carpet",
+    "ordinary_solution": "Rug tape",
+    "creative_solution": "piece of furniture",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Velcro"
+  },
+  {
+    "id": 116,
+    "problem": "To stop a glass from sticking to a wooden table",
+    "ordinary_solution": "A coaster",
+    "creative_solution": "A napkin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A pile of salt"
+  },
+  {
+    "id": 118,
+    "problem": "To create a temporary handle for a cardboard box",
+    "ordinary_solution": "Cut holes",
+    "creative_solution": "loop of tape",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of string"
+  },
+  {
+    "id": 122,
+    "problem": "To get a small, dropped item from a tight space",
+    "ordinary_solution": "Pliers",
+    "creative_solution": "Sticky tape",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Your hand"
+  },
+  {
+    "id": 123,
+    "problem": "To insulate a cold drink",
+    "ordinary_solution": "A napkin",
+    "creative_solution": "A koozie",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A sock"
+  },
+  {
+    "id": 126,
+    "problem": "To stop a chair from scratching a wood floor",
+    "ordinary_solution": "Felt pads",
+    "creative_solution": "Socks",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Pieces of tape"
+  },
+  {
+    "id": 130,
+    "problem": "To make a makeshift paintbrush",
+    "ordinary_solution": "Tooth brush",
+    "creative_solution": "A sponge",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A bundle of grass"
+  },
+  {
+    "id": 133,
+    "problem": "To keep a rope from fraying at the end",
+    "ordinary_solution": "Tape",
+    "creative_solution": "A lighter",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A knot"
+  },
+  {
+    "id": 138,
+    "problem": "To keep a tie from swinging",
+    "ordinary_solution": "A tie clip",
+    "creative_solution": "A safety pin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Tape"
+  },
+  {
+    "id": 139,
+    "problem": "To keep a spool of thread from unwinding",
+    "ordinary_solution": "A small cut",
+    "creative_solution": "A rubber band",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 143,
+    "problem": "To make a temporary patch for a hole in a pocket",
+    "ordinary_solution": "A safety pin",
+    "creative_solution": "An iron-on patch",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 148,
+    "problem": "To get the last of the toothpaste out",
+    "ordinary_solution": "Squeeze from bottom",
+    "creative_solution": "A clip",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Cut the tube"
+  },
+  {
+    "id": 178,
+    "problem": "To make carrying a heavy box easier",
+    "ordinary_solution": "A cart",
+    "creative_solution": "A strap",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A second person"
+  },
+  {
+    "id": 179,
+    "problem": "To crack a nut without a nutcracker",
+    "ordinary_solution": "A hammer",
+    "creative_solution": "Pliers",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A door hinge"
+  },
+  {
+    "id": 186,
+    "problem": "To stop a door from creaking",
+    "ordinary_solution": "Lubricating oil",
+    "creative_solution": "Petroleum jelly",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Butter"
+  },
+  {
+    "id": 189,
+    "problem": "To make a small object stand up",
+    "ordinary_solution": "Mounting putty",
+    "creative_solution": "piece of clay",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A drop of glue"
+  },
+  {
+    "id": 190,
+    "problem": "To make a temporary plant pot",
+    "ordinary_solution": "A yogurt cup",
+    "creative_solution": "A cut bottle",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A paper bag"
+  },
+  {
+    "id": 191,
+    "problem": "To lift a heavy piece of furniture",
+    "ordinary_solution": "A dolly",
+    "creative_solution": "Furniture sliders",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A lever (like a board)"
+  },
+  {
+    "id": 193,
+    "problem": "To stop a cord from unplugging easily",
+    "ordinary_solution": "Tape",
+    "creative_solution": "A spring clip",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of string"
+  },
+  {
+    "id": 199,
+    "problem": "To get a better grip on a glass jar",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "A towel",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A glove"
+  },
+  {
+    "id": 203,
+    "problem": "To clean a toilet bowl without a brush",
+    "ordinary_solution": "A sponge",
+    "creative_solution": "A stick",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A spoon"
+  },
+  {
+    "id": 205,
+    "problem": "To store small hardware (screws, nails)",
+    "ordinary_solution": "A jar",
+    "creative_solution": "ice cube tray",
+    "implausible_solution": "",
+    "ai_implausible_failed": "An envelope"
+  },
+  {
+    "id": 208,
+    "problem": "To carry a single key without a pocket",
+    "ordinary_solution": "A shoelace",
+    "creative_solution": "A safety pin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of string"
+  },
+  {
+    "id": 209,
+    "problem": "To make a temporary lampshade",
+    "ordinary_solution": "piece of paper",
+    "creative_solution": "A t-shirt",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A plastic bowl"
+  },
+  {
+    "id": 211,
+    "problem": "To stop a rolling pin from sticking to dough",
+    "ordinary_solution": "Flour",
+    "creative_solution": "cold (chilled) pin",
+    "implausible_solution": "",
+    "ai_implausible_failed": "Water"
+  },
+  {
+    "id": 213,
+    "problem": "To get a better grip on a round doorknob",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "A balloon",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of tape"
+  },
+  {
+    "id": 218,
+    "problem": "To keep a drawer from sliding open",
+    "ordinary_solution": "A wedge",
+    "creative_solution": "piece of tape",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A piece of paper"
+  },
+  {
+    "id": 230,
+    "problem": "To lift a hot jar out of boiling water",
+    "ordinary_solution": "Tongs",
+    "creative_solution": "Two spoons",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A towel"
+  },
+  {
+    "id": 243,
+    "problem": "To carry a large, awkward-shaped object",
+    "ordinary_solution": "A box",
+    "creative_solution": "A sturdy blanket",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A rope"
+  },
+  {
+    "id": 254,
+    "problem": "To create a makeshift shovel",
+    "ordinary_solution": "A dustpan",
+    "creative_solution": "A piece of",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A large spoon"
+  },
+  {
+    "id": 302,
+    "problem": "To clean a narrow, deep container",
+    "ordinary_solution": "A bottle brush",
+    "creative_solution": "Rice",
+    "implausible_solution": "",
+    "ai_implausible_failed": "A fork"
   }
 ]

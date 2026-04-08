@@ -5,7 +5,7 @@
     "ordinary_solution": "Frozen vegetables",
     "creative_solution": "A frozen sponge",
     "ai_implausible": "A metal spoon",
-    "rejection_reason": "Knowledge-based problem (cooling = memorized trick); AI implausible 'metal spoon' could actually work via thermal conductivity"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks)"
   },
   {
     "id": 16,
@@ -13,7 +13,7 @@
     "ordinary_solution": "Rolled paper",
     "creative_solution": "A cut bottle",
     "ai_implausible": "A plastic bag",
-    "rejection_reason": "Knowledge-based (making a funnel is a common life-hack); AI implausible 'plastic bag' could be shaped into a funnel"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 50,
@@ -21,7 +21,7 @@
     "ordinary_solution": "A lettuce wrap",
     "creative_solution": "A holder",
     "ai_implausible": "A napkin",
-    "rejection_reason": "Missing constraint; creative solution 'a holder' is too ordinary; AI implausible 'a napkin' could actually wrap a taco"
+    "rejection_reason": "Missing explicit constraint"
   },
   {
     "id": 53,
@@ -29,7 +29,7 @@
     "ordinary_solution": "Medical tape",
     "creative_solution": "A liquid bandage",
     "ai_implausible": "A sock",
-    "rejection_reason": "Knowledge-based (bandage care); missing clear constraint; AI implausible 'a sock' could hold bandage in place"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 70,
@@ -37,7 +37,7 @@
     "ordinary_solution": "Mounting putty",
     "creative_solution": "Staples",
     "ai_implausible": "Toothpaste",
-    "rejection_reason": "Creative solution 'staples' is too ordinary/common; not a secondary-feature solution"
+    "rejection_reason": "Does not meet quality requirements"
   },
   {
     "id": 74,
@@ -45,7 +45,15 @@
     "ordinary_solution": "Clear nail polish",
     "creative_solution": "Dental floss",
     "ai_implausible": "A small wire",
-    "rejection_reason": "Knowledge-based (button reinforcement); AI implausible 'a small wire' could reinforce a button thread"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
+  },
+  {
+    "id": 81,
+    "problem": "To keep cut flowers fresh longer",
+    "ordinary_solution": "Flower food",
+    "creative_solution": "A penny",
+    "ai_implausible": "Aspirin",
+    "rejection_reason": "Missing explicit constraint"
   },
   {
     "id": 86,
@@ -53,7 +61,7 @@
     "ordinary_solution": "A candle",
     "creative_solution": "A flashlight",
     "ai_implausible": "A phone screen",
-    "rejection_reason": "Knowledge-based (emergency lighting); creative 'flashlight' IS the ordinary solution; AI implausible 'phone screen' IS a light source"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 87,
@@ -61,7 +69,7 @@
     "ordinary_solution": "A clean cloth",
     "creative_solution": "A paper towel",
     "ai_implausible": "A piece of tape",
-    "rejection_reason": "Knowledge-based (first aid); creative 'paper towel' is too ordinary; AI implausible 'tape' IS used in bandaging"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 90,
@@ -69,7 +77,7 @@
     "ordinary_solution": "A vinegar trap",
     "creative_solution": "A piece of fruit",
     "ai_implausible": "A flyswatter",
-    "rejection_reason": "Knowledge-based (pest control = memorized trick); missing constraint"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 91,
@@ -77,7 +85,7 @@
     "ordinary_solution": "A restoration kit",
     "creative_solution": "Toothpaste",
     "ai_implausible": "Bug spray",
-    "rejection_reason": "Knowledge-based (car maintenance = specialized knowledge); missing constraint"
+    "rejection_reason": "Knowledge-based problem (relies on memorized tricks); Missing explicit constraint"
   },
   {
     "id": 104,
@@ -85,7 +93,7 @@
     "ordinary_solution": "A plastic bag",
     "creative_solution": "A cardboard box",
     "ai_implausible": "A hat",
-    "rejection_reason": "Creative 'cardboard box' is too ordinary; weak problem overall"
+    "rejection_reason": "Missing explicit constraint"
   },
   {
     "id": 112,
@@ -93,6 +101,326 @@
     "ordinary_solution": "A piece of paper",
     "creative_solution": "A piece of tape",
     "ai_implausible": "A chair",
-    "rejection_reason": "Problem is about creating text/sign, not physical manipulation; creative 'tape' is ordinary"
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 128,
+    "problem": "To protect a single plant from hail",
+    "ordinary_solution": "A bucket",
+    "creative_solution": "A colander",
+    "ai_implausible": "A large leaf",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 129,
+    "problem": "To carry a few logs of firewood",
+    "ordinary_solution": "Your arms",
+    "creative_solution": "A sturdy bag",
+    "ai_implausible": "A t-shirt",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 175,
+    "problem": "To muffle a loud, ticking clock",
+    "ordinary_solution": "Put in a drawer",
+    "creative_solution": "Wrap in a sock",
+    "ai_implausible": "Cover with a glass",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 177,
+    "problem": "To stop a pet bowl from sliding on the floor",
+    "ordinary_solution": "A mat",
+    "creative_solution": "A heavy bowl",
+    "ai_implausible": "A piece of tape",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 192,
+    "problem": "To bundle a set of pens or pencils",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "A string",
+    "ai_implausible": "A piece of tape",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 194,
+    "problem": "To attach a note to a door",
+    "ordinary_solution": "Tape",
+    "creative_solution": "A sticky note",
+    "ai_implausible": "A rubber band",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 195,
+    "problem": "To make a temporary shelf in a cabinet",
+    "ordinary_solution": "A sturdy box",
+    "creative_solution": "A stack of books",
+    "ai_implausible": "A wire rack",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 196,
+    "problem": "To block the view through a glass door",
+    "ordinary_solution": "A curtain",
+    "creative_solution": "A piece of paper",
+    "ai_implausible": "A large plant",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 201,
+    "problem": "To stop a sofa from sliding on a hard floor",
+    "ordinary_solution": "A rug",
+    "creative_solution": "Hot glue",
+    "ai_implausible": "A piece of paper",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 206,
+    "problem": "To make a temporary wallet",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "A spring clip",
+    "ai_implausible": "A piece of tape",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 207,
+    "problem": "To block a view through a keyhole",
+    "ordinary_solution": "Tape",
+    "creative_solution": "Mounting putty",
+    "ai_implausible": "A piece of paper",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 215,
+    "problem": "To make a temporary shelf in a locker",
+    "ordinary_solution": "A sturdy box",
+    "creative_solution": "A stack of books",
+    "ai_implausible": "A piece of cardboard",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 227,
+    "problem": "To make a temporary label for a plant",
+    "ordinary_solution": "A plastic tag",
+    "creative_solution": "A popsicle stick",
+    "ai_implausible": "A piece of paper",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 228,
+    "problem": "To stop a pen from rolling off a desk",
+    "ordinary_solution": "A spring clip",
+    "creative_solution": "A piece of tape",
+    "ai_implausible": "A piece of putty",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 231,
+    "problem": "To protect a ripening fruit from insects",
+    "ordinary_solution": "A mesh bag",
+    "creative_solution": "A paper bag",
+    "ai_implausible": "A plastic bag",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 248,
+    "problem": "To make a temporary water bowl for a pet",
+    "ordinary_solution": "A plastic bag",
+    "creative_solution": "A folded piece of foil",
+    "ai_implausible": "Your cupped hands",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 258,
+    "problem": "To make a temporary roof\" for a small outdoor object...\"",
+    "ordinary_solution": "A plastic sheet",
+    "creative_solution": "A piece of plywood",
+    "ai_implausible": "A large umbrella",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 262,
+    "problem": "To make a temporary Do Not Disturb\" sign...\"",
+    "ordinary_solution": "A piece of paper",
+    "creative_solution": "A sock",
+    "ai_implausible": "A piece of tape",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 266,
+    "problem": "To make a temporary plant pot",
+    "ordinary_solution": "A yogurt cup",
+    "creative_solution": "A cut bottle",
+    "ai_implausible": "A paper bag",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 269,
+    "problem": "To attach a note to a door",
+    "ordinary_solution": "Tape",
+    "creative_solution": "A sticky note",
+    "ai_implausible": "A rubber band",
+    "rejection_reason": "Missing explicit constraint"
+  },
+  {
+    "id": 8,
+    "problem": "To clean a dusty surface when I don't have a cloth",
+    "ordinary_solution": "A paper towel",
+    "creative_solution": "A dryer sheet",
+    "ai_implausible": "A piece of bread",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 12,
+    "problem": "To clean my glasses when I don't have a cloth",
+    "ordinary_solution": "Your shirt",
+    "creative_solution": "A coffee filter",
+    "ai_implausible": "A napkin",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 21,
+    "problem": "To stir something when I don't have a spoon... To stir boiling water without a spoon",
+    "ordinary_solution": "A fork",
+    "creative_solution": "A pencil",
+    "ai_implausible": "Your finger",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 44,
+    "problem": "To absorb moisture in a musty closet",
+    "ordinary_solution": "Charcoal",
+    "creative_solution": "A box of chalk",
+    "ai_implausible": "A bag of rice",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 59,
+    "problem": "To keep a sleeping bag rolled up tightly",
+    "ordinary_solution": "A stuff sack",
+    "creative_solution": "Straps",
+    "ai_implausible": "Rope",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 64,
+    "problem": "To create a makeshift splint for an injury",
+    "ordinary_solution": "A stick",
+    "creative_solution": "A rolled newspaper",
+    "ai_implausible": "A ruler",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 68,
+    "problem": "To create a makeshift dustpan",
+    "ordinary_solution": "A piece of cardboard",
+    "creative_solution": "A stiff envelope",
+    "ai_implausible": "A piece of paper",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 69,
+    "problem": "To protect a plant from frost",
+    "ordinary_solution": "A bucket",
+    "creative_solution": "A sheet",
+    "ai_implausible": "A plastic bottle",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 71,
+    "problem": "To keep a door from locking behind you",
+    "ordinary_solution": "Tape the latch",
+    "creative_solution": "A rubber band",
+    "ai_implausible": "A coin",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 83,
+    "problem": "To prevent a pot from boiling over",
+    "ordinary_solution": "A wooden spoon",
+    "creative_solution": "A splash of oil",
+    "ai_implausible": "A lid askew",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 93,
+    "problem": "To remove a stripped screw",
+    "ordinary_solution": "A rubber band",
+    "creative_solution": "Pliers",
+    "ai_implausible": "A hammer",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 96,
+    "problem": "To make a temporary car antenna",
+    "ordinary_solution": "A coat hanger",
+    "creative_solution": "A long wire",
+    "ai_implausible": "A fork",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 100,
+    "problem": "To create an emergency waterproof container",
+    "ordinary_solution": "A plastic bottle",
+    "creative_solution": "A glass jar",
+    "ai_implausible": "A sealed bag",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 115,
+    "problem": "To carry a large, flat piece of glass",
+    "ordinary_solution": "Gloves",
+    "creative_solution": "A suction cup handle",
+    "ai_implausible": "Your bare hands",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 120,
+    "problem": "To make a makeshift placemat",
+    "ordinary_solution": "A piece of paper",
+    "creative_solution": "A cutting board",
+    "ai_implausible": "A t-shirt",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 121,
+    "problem": "To mark a line on a wall without a pencil",
+    "ordinary_solution": "A piece of chalk",
+    "creative_solution": "A furniture edge",
+    "ai_implausible": "A fingernail",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 125,
+    "problem": "To stop a zipper from falling down",
+    "ordinary_solution": "A safety pin",
+    "creative_solution": "A key ring",
+    "ai_implausible": "A piece of thread",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 127,
+    "problem": "To make a temporary shoe insole",
+    "ordinary_solution": "A piece of cardboard",
+    "creative_solution": "A folded towel",
+    "ai_implausible": "A piece of foam",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 131,
+    "problem": "To divide a room temporarily",
+    "ordinary_solution": "A curtain",
+    "creative_solution": "A bookshelf",
+    "ai_implausible": "A row of chairs",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
+  },
+  {
+    "id": 134,
+    "problem": "To create a temporary label for a jar",
+    "ordinary_solution": "MaskING tape",
+    "creative_solution": "A rubber band",
+    "ai_implausible": "A wax pencil",
+    "rejection_reason": "Non-approved: marginal quality or borderline issues"
   }
 ]
