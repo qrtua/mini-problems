@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Single-file pipeline for generating, solving, and evaluating creativity mini-problems using **Gemini 3 Flash Preview** API. Produces 300 semantically unique problems, each with ordinary/creative/implausible solutions. Follows the Instructions PDF spec.
+Single-file pipeline for generating, solving, and evaluating creativity mini-problems using **Gemini API**. Produces 500 semantically unique problems, each with ordinary/creative/implausible solutions. Follows the Instructions PDF spec.
 
 ## Commands
 
@@ -14,15 +14,25 @@ pip install google-generativeai numpy pandas sentence-transformers
 
 # Run pipeline
 export GEMINI_API_KEY=your_key
-python pipeline.py                              # 300 problems (default)
-python pipeline.py --n-problems 10              # quick test
-python pipeline.py --output results.csv         # custom output
-python pipeline.py --similarity-threshold 0.65  # stricter diversity
-python pipeline.py --no-rejected                # skip rejected examples
-python pipeline.py --no-approved                # generate all 300 from scratch
-```
 
-By default, the 112 human-approved problems from the CSV are included in the output. The pipeline generates only the remaining ~188 new problems to reach the 300 target. Use `--no-approved` to generate all from scratch.
+# Quick test (20 problems, generation only)
+python pipeline.py --n-problems 20 --no-solve --no-evaluate
+
+# Full run (500 problems, floor 35 per category)
+python pipeline.py --n-problems 500 --cat-floor 35 --batch-size 10
+
+# Test different injection ratios
+python pipeline.py --n-problems 20 --n-same-cat 3 --n-cross-cat 2   # more anchoring
+python pipeline.py --n-problems 20 --n-same-cat 0 --n-cross-cat 5   # no anchoring
+python pipeline.py --n-problems 20 --n-same-cat 1 --n-cross-cat 2 --n-rejected 1  # minimal
+
+# Test different batch sizes
+python pipeline.py --n-problems 50 --batch-size 1    # one at a time (old behavior)
+python pipeline.py --n-problems 50 --batch-size 10   # larger batches
+
+# Skip approved examples in output
+python pipeline.py --n-problems 500 --no-approved
+```
 
 No test suite exists.
 
@@ -30,22 +40,46 @@ No test suite exists.
 
 Everything is in `pipeline.py` — a single-file pipeline with 4 steps:
 
-1. **Step 1: Generate** — problems + ordinary solutions in batches with diversity control (DuplicateTracker: keyword overlap + semantic similarity via sentence-transformers). Category balancing across 8 categories. Adaptive similarity threshold decreases as the set grows (0.75→0.65→0.55).
-2. **Step 2a/2b: Creative & Implausible** — generated separately for existing problems. Creative uses secondary-feature mapping. Implausible must have NO physical property that could solve the problem.
-3. **Step 3: Solve** — Gemini re-solves each problem without seeing original solutions (cross-validation).
-4. **Step 4: Evaluate** — rates feasibility/novelty (1-5) and flags quality issues (creative_too_ordinary, implausible_is_plausible, knowledge_based, missing_constraint).
+1. **Step 1: Generate** — problems + ordinary solutions in batches with:
+   - Stratified example sampling (n_same_cat from target category + n_cross_cat from others)
+   - Category balancing with minimum floor (cat_floor per category, rest random)
+   - Rejected example sampling (1 per rejection reason type, maximizing info density)
+   - DuplicateTracker: keyword overlap (0.80) + semantic similarity (adaptive threshold)
+2. **Step 2a: Creative** — generated separately, uses secondary-feature mapping prompts
+3. **Step 2b: Implausible** — generated separately, must have NO physical property that could solve
+4. **Step 3: Solve** — Gemini re-solves each problem without seeing original solutions
+5. **Step 4: Evaluate** — rates feasibility/novelty (1-5), flags quality issues
 
-Key classes: `Config` (dataclass), `GeminiModel` (API wrapper with retry), `DuplicateTracker` (2-layer dedup).
+Key classes: `Config` (all knobs), `GeminiModel` (API wrapper), `DuplicateTracker` (2-layer dedup), `CategoryBalancer` (floor + random distribution).
 
-## Constraints (Instructions PDF)
+## Configurable Parameters
 
-- Problem: starts with "To", 4-7 words after "To", must include one explicit constraint
-- Solutions: 2-3 words each, concrete physical objects
-- Problems must be physical, universal, knowledge-neutral
-- 300 problems must be semantically distinct (no meaning overlap)
+| Parameter | Default | What it controls |
+|-----------|---------|-----------------|
+| `--n-same-cat` | 2 | Examples from target category shown per call |
+| `--n-cross-cat` | 3 | Examples from other categories shown per call |
+| `--n-rejected` | 2 | Rejected examples shown per call (1 per reason type) |
+| `--batch-size` | 5 | Problems generated per API call |
+| `--cat-floor` | 35 | Minimum problems per category |
+| `--similarity-threshold` | 0.75 | Base semantic similarity threshold (adaptive) |
+| `--temperature` | 0.8 | Generation temperature |
+
+## 10 Categories
+
+Categories describe problem domains (what needs solving), not solution mechanisms:
+
+1. **grip-friction** — getting grip, preventing sliding/slipping/rolling
+2. **containment-closure** — keeping things closed, together, bundled
+3. **protection-shielding** — blocking damage, weather, heat, insects
+4. **cleaning-removal** — removing substances, stains, cleaning
+5. **attachment-fastening** — connecting, securing, sealing, patching
+6. **support-stabilization** — propping, standing, preventing tipping
+7. **reaching-retrieval** — accessing hard-to-reach things, extracting from tight spaces
+8. **makeshift-tool** — creating improvised tools/objects
+9. **separation-extraction** — separating stuck things, filtering
+10. **temperature-management** — insulating, cooling, handling hot/cold
 
 ## Data
 
-- `data/examples.json` — 112 human-approved problems from `#Revised_MPv2 - Sheet1.csv` (used for few-shot prompting + included in output by default)
-- `data/rejected.json` — 53 rejected/non-approved examples with reasons (anti-overfitting)
-- `#Revised_MPv2 - Sheet1.csv` — source CSV with 1000 human-rated problems (112 approved, 33 rejected, 63 non-approved, 95 repeated, 697 unreviewed)
+- `data/examples.json` — 112 human-approved problems WITH category assignments
+- `data/rejected.json` — 53 rejected/non-approved examples with reasons
