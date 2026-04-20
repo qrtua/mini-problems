@@ -1,139 +1,134 @@
 # Mini-Problems Pipeline
 
-Pipeline do generowania, rozwiązywania i ewaluacji mini-problemów kreatywności.
-Zbudowany na wzorcu `run_reg.py` — używa **vLLM** do inferencji i **Hydra** do konfiguracji.
+Single-file pipeline for generating, solving, and evaluating creativity mini-problems using the **Gemini API**. Produces up to 500 semantically unique problems, each with ordinary/creative/implausible solutions.
 
-## Struktura projektu
-
-```
-mini-problems/
-├── configs/
-│   ├── config-generate.yaml     # Konfiguracja generatora
-│   ├── config-solve.yaml        # Konfiguracja solvera
-│   ├── config-evaluate.yaml     # Konfiguracja ewaluatora
-│   └── model/
-│       ├── llama3-8b.yaml       # Llama 3 8B (domyślny)
-│       ├── llama3-70b.yaml      # Llama 3 70B
-│       └── deepseek.yaml        # DeepSeek V2
-├── prompts/
-│   ├── generate.json            # Prompty do generowania problemów
-│   ├── solve.json               # Prompty do rozwiązywania
-│   └── evaluate.json            # Prompty do ewaluacji
-├── data/
-│   └── examples.json            # 11 przykładowych mini-problemów
-├── run_generate.py              # Moduł 1: Generator
-├── run_solve.py                 # Moduł 2: Solver
-├── run_evaluate.py              # Moduł 3: Evaluator
-├── utils.py                     # Wspólne narzędzia
-└── README.md
-```
-
-## Trzy moduły
-
-### Moduł 1: Generator (`run_generate.py`)
-Generuje nowe mini-problemy z trzema typami rozwiązań.
+## Quick Start
 
 ```bash
-# Domyślnie: 20 problemów, Llama 3 8B
-python run_generate.py
+pip install google-generativeai numpy pandas sentence-transformers
+export GEMINI_API_KEY=your_key
 
-# 50 problemów z Llama 3 70B
-python run_generate.py model=llama3-70b n_problems=50
+# Quick test (20 problems, generation only)
+python pipeline.py --n-problems 20 --no-solve --no-evaluate
 
-# Użyj odrzuconych przykładów (anti-overfitting)
-python run_generate.py use_rejected=true
+# Full run (500 problems)
+python pipeline.py --n-problems 500 --cat-floor 35 --batch-size 10
+
+# Run test suite (5 configurations x 50 problems)
+bash run_tests.sh
 ```
 
-### Moduł 2: Solver (`run_solve.py`)
-Rozwiązuje problemy (z Modułu 1) INNYM modelem — nie widzi oryginalnych rozwiązań.
+## Architecture
+
+Everything is in `pipeline.py` — four steps:
+
+1. **Step 1: Generate** — problems + ordinary solutions in batches with stratified example sampling, category balancing, deduplication, and stop-loss
+2. **Step 2a/2b: Creative & Implausible** — generated separately to prevent contamination between solution types
+3. **Step 3: Solve** — model re-solves each problem without seeing original solutions (cross-validation)
+4. **Step 4: Evaluate** — rates feasibility/novelty (1-5) and flags quality issues
+
+## 10 Categories
+
+Categories describe problem domains (what needs solving), not solution mechanisms:
+
+| Category | Description | Approved examples |
+|---|---|---|
+| grip-friction | Getting grip, preventing sliding/slipping/rolling | 20 |
+| makeshift-tool | Creating improvised tools/objects | 19 |
+| containment-closure | Keeping things closed, together, bundled | 14 |
+| protection-shielding | Blocking damage, weather, heat, insects | 13 |
+| support-stabilization | Propping, standing, preventing tipping | 10 |
+| cleaning-removal | Removing substances, stains, cleaning | 10 |
+| attachment-fastening | Connecting, securing, sealing, patching | 8 |
+| separation-extraction | Separating stuck things, filtering | 7 |
+| reaching-retrieval | Accessing hard-to-reach things, extracting | 6 |
+| temperature-management | Insulating, cooling, handling hot/cold | 5 |
+
+## Configurable Parameters
+
+### Example Injection (per API call)
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--n-same-cat` | 2 | Examples from target category (anchoring) |
+| `--n-cross-cat` | 3 | Examples from other categories (diversity) |
+| `--n-rejected` | 2 | Rejected examples, 1 per reason type |
+
+### Generation
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--batch-size` | 5 | Problems generated per API call |
+| `--cat-floor` | 35 | Minimum problems per category |
+| `--temperature` | 0.8 | Generation temperature |
+| `--model` | gemini-2.5-flash-preview-05-20 | Model to use |
+
+### Diversity Control
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--similarity-threshold` | 0.75 | Starting semantic similarity threshold |
+| `--similarity-step` | 0.05 | Threshold drop per 100 problems |
+| `--similarity-floor` | 0.40 | Lowest the threshold can drop to |
+
+### Stop-Loss
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--stoploss-window` | 20 | Sliding window size |
+| `--stoploss-min-accepted` | 3 | Min accepted in window before stopping |
+| `--stoploss-cat-streak` | 5 | Consecutive failures to skip a category |
+
+### Pipeline Steps
+
+| Parameter | Description |
+|---|---|
+| `--no-solve` | Skip solve step (saves time during testing) |
+| `--no-evaluate` | Skip evaluate step |
+| `--no-approved` | Don't include 112 approved problems in output |
+
+## Test Configurations
 
 ```bash
-# Rozwiąż problemy z generatora używając DeepSeek
-python run_solve.py model=deepseek data.input_path=generated_problems.csv
+# A: baseline
+python pipeline.py --n-problems 50 --cat-floor 3 --no-solve --no-evaluate --output run_A.csv
 
-# Generuj tylko kreatywne rozwiązania
-python run_solve.py solve_mode=creative_only
+# B: more category anchoring
+python pipeline.py --n-problems 50 --cat-floor 3 --n-same-cat 3 --n-cross-cat 2 --no-solve --no-evaluate --output run_B.csv
+
+# C: larger batches
+python pipeline.py --n-problems 50 --cat-floor 3 --batch-size 10 --no-solve --no-evaluate --output run_C.csv
+
+# D: minimal input
+python pipeline.py --n-problems 50 --cat-floor 3 --n-same-cat 1 --n-cross-cat 2 --n-rejected 1 --no-solve --no-evaluate --output run_D.csv
+
+# E: no rejected examples
+python pipeline.py --n-problems 50 --cat-floor 3 --n-rejected 0 --no-solve --no-evaluate --output run_E.csv
+
+# F: Gemini Pro (quality comparison)
+python pipeline.py --n-problems 50 --cat-floor 3 --model gemini-2.5-pro-preview-05-06 --no-solve --no-evaluate --output run_F.csv
 ```
 
-### Moduł 3: Evaluator (`run_evaluate.py`)
-Ocenia pary (problem, rozwiązanie) pod kątem feasibility i novelty.
+## Output Files
 
-```bash
-# Oceń rozwiązane problemy
-python run_evaluate.py data.input_path=solved_problems.csv
+- `generated_problems.csv` — accepted problems with solutions and evaluations
+- `rejected_during_generation.csv` — every rejected problem with reason, most similar existing problem, similarity score, and threshold used
 
-# Klasyfikuj rozwiązania (ordinary/creative/implausible)
-python run_evaluate.py eval_mode=classify
-```
+## Data
 
-## Typowy workflow
+- `data/examples.json` — 112 human-approved problems with category assignments
+- `data/rejected.json` — 53 rejected/non-approved examples with rejection reasons
 
-```bash
-# Krok 1: Generuj problemy (Llama 3 70B)
-python run_generate.py model=llama3-70b n_problems=30
+## Problem Format
 
-# Krok 2: Rozwiąż te problemy innym modelem (DeepSeek)
-python run_solve.py model=deepseek data.input_path=outputs/*/generated_problems.csv
+- Problem: starts with "To", 4-7 words after "To", must include one explicit constraint
+- Solutions: exactly 2-3 words each, concrete physical objects
+- Problems must be physical, universal, knowledge-neutral
 
-# Krok 3: Oceń rozwiązania (Llama 3 70B jako sędzia)
-python run_evaluate.py model=llama3-70b data.input_path=outputs/*/solved_problems.csv
-```
+## Cost Estimates
 
-## Hydra — krótkie wyjaśnienie
-
-Hydra to system konfiguracji. Zamiast zmieniać kod, zmieniasz parametry z linii poleceń:
-
-```bash
-# Zmiana modelu:
-python run_generate.py model=deepseek
-
-# Zmiana wielu parametrów:
-python run_generate.py model=llama3-70b n_problems=100 sampling_params.temperature=0.9
-
-# Hydra tworzy folder outputs/ z timestampem dla każdego uruchomienia
-# — znajdziesz tam logi i wyniki
-```
-
-## Modele
-
-Pipeline jest zoptymalizowany pod **RTX 4090 (24GB VRAM)**. Dostępne modele:
-
-**Tier 1 — łatwo mieści się na 4090:**
-- `qwen2.5-7b` — najlepszy JSON output, domyślny model
-- `llama3.1-8b` — silna baza odniesienia (wymaga licencji Meta na HF)
-- `deepseek-r1-7b` — reasoning/chain-of-thought, dobry do ewaluacji
-- `mistral-7b` — dobry do kreatywnej generacji
-- `phi3.5-mini` — najmniejszy, najszybszy (~8GB VRAM)
-
-**Tier 2 — mieści się, ale ciasno (zmniejszony context window):**
-- `qwen2.5-14b` — najlepsza jakość w naszym zestawie
-- `deepseek-r1-14b` — najlepszy ewaluator (chain-of-thought)
-- `gemma2-9b` — Google, inna perspektywa (wymaga licencji Gemma)
-
-```bash
-# Pobieranie modeli:
-python download_models.py --list                    # pokaż dostępne
-python download_models.py --models qwen2.5-7b       # pobierz jeden
-python download_models.py --tier1                    # pobierz Tier 1
-python download_models.py --all                      # pobierz wszystkie (~142GB)
-```
-
-## Wymagania
-
-```bash
-pip install torch vllm hydra-core omegaconf wandb pandas tqdm huggingface_hub
-huggingface-cli login  # potrzebne do gated models (Llama, Gemma)
-```
-
-## Format danych
-
-Każdy mini-problem ma następujące pola:
-
-| Pole | Opis | Wymaganie |
-|------|-------|-----------|
-| `problem` | Opis problemu (zaczyna się od "To") | 4-9 słów (bez "To") |
-| `category` | Kategoria (np. visuo-spatial) | 1 z 8 kategorii |
-| `constraint` | Ograniczenie w problemie | tekst |
-| `ordinary_solution` | Rozwiązanie zwykłe | 1-3 słowa |
-| `creative_solution` | Rozwiązanie kreatywne | 1-3 słowa |
-| `implausible_solution` | Rozwiązanie bezsensowne | 1-3 słowa |
+| Scenario | Gemini Flash | Claude Sonnet 4.6 |
+|---|---|---|
+| 5 test runs x 50 (no solve/eval) | ~$0.14 | ~$1.02 |
+| 500 problems (full pipeline) | ~$0.78 | ~$5.49 |
+| Pessimistic (retries, more tokens) | ~$2 | ~$14 |
