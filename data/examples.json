@@ -5,7 +5,8 @@
     "ordinary_solution": "Tape",
     "creative_solution": "Nail polish",
     "implausible_solution": "oil",
-    "ai_implausible_failed": "Honey (plausible)"
+    "ai_implausible_failed": "Honey (plausible)",
+    "category": "attachment-fastening"
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "ordinary_solution": "A towel",
     "creative_solution": "Duct tape",
     "implausible_solution": "washing machine",
-    "ai_implausible_failed": "A hammer (perfect solution)"
+    "ai_implausible_failed": "A hammer (perfect solution)",
+    "category": "grip-friction"
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "ordinary_solution": "A safety pin",
     "creative_solution": "A shoelace",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of string"
+    "ai_implausible_failed": "A piece of string",
+    "category": "grip-friction"
   },
   {
     "id": 4,
@@ -29,7 +32,8 @@
     "ordinary_solution": "A chair",
     "creative_solution": "Tongs",
     "implausible_solution": "",
-    "ai_implausible_failed": "A broom"
+    "ai_implausible_failed": "A broom",
+    "category": "reaching-retrieval"
   },
   {
     "id": 5,
@@ -37,7 +41,8 @@
     "ordinary_solution": "A wedge",
     "creative_solution": "A shoe",
     "implausible_solution": "",
-    "ai_implausible_failed": "A pillow"
+    "ai_implausible_failed": "A pillow",
+    "category": "support-stabilization"
   },
   {
     "id": 6,
@@ -45,7 +50,8 @@
     "ordinary_solution": "A mug",
     "creative_solution": "A pants hanger",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "support-stabilization"
   },
   {
     "id": 7,
@@ -53,7 +59,8 @@
     "ordinary_solution": "An umbrella",
     "creative_solution": "Plastic bags",
     "implausible_solution": "",
-    "ai_implausible_failed": "Paper towels"
+    "ai_implausible_failed": "Paper towels",
+    "category": "protection-shielding"
   },
   {
     "id": 9,
@@ -61,7 +68,8 @@
     "ordinary_solution": "A folded napkin",
     "creative_solution": "A coin",
     "implausible_solution": "",
-    "ai_implausible_failed": "Chewing gum"
+    "ai_implausible_failed": "Chewing gum",
+    "category": "attachment-fastening"
   },
   {
     "id": 10,
@@ -69,7 +77,8 @@
     "ordinary_solution": "A rubber band",
     "creative_solution": "A spring clip",
     "implausible_solution": "",
-    "ai_implausible_failed": "A paperclip"
+    "ai_implausible_failed": "A paperclip",
+    "category": "containment-closure"
   },
   {
     "id": 11,
@@ -77,7 +86,8 @@
     "ordinary_solution": "piece of paper",
     "creative_solution": "A dollar bill",
     "implausible_solution": "",
-    "ai_implausible_failed": "A coin"
+    "ai_implausible_failed": "A coin",
+    "category": "makeshift-tool"
   },
   {
     "id": 13,
@@ -85,7 +95,8 @@
     "ordinary_solution": "A bowl",
     "creative_solution": "A paper tube",
     "implausible_solution": "",
-    "ai_implausible_failed": "A pillow"
+    "ai_implausible_failed": "A pillow",
+    "category": "makeshift-tool"
   },
   {
     "id": 15,
@@ -93,7 +104,8 @@
     "ordinary_solution": "A towel",
     "creative_solution": "A pool noodle",
     "implausible_solution": "",
-    "ai_implausible_failed": "A row of books"
+    "ai_implausible_failed": "A row of books",
+    "category": "protection-shielding"
   },
   {
     "id": 17,
@@ -101,7 +113,8 @@
     "ordinary_solution": "A knot",
     "creative_solution": "A bread clip",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "attachment-fastening"
   },
   {
     "id": 18,
@@ -109,7 +122,8 @@
     "ordinary_solution": "Pliers",
     "creative_solution": "A comb",
     "implausible_solution": "",
-    "ai_implausible_failed": "A marshmallow"
+    "ai_implausible_failed": "A marshmallow",
+    "category": "protection-shielding"
   },
   {
     "id": 19,
@@ -117,7 +131,8 @@
     "ordinary_solution": "A flashlight",
     "creative_solution": "A stocking",
     "implausible_solution": "",
-    "ai_implausible_failed": "A magnet"
+    "ai_implausible_failed": "A magnet",
+    "category": "reaching-retrieval"
   },
   {
     "id": 20,
@@ -125,7 +140,8 @@
     "ordinary_solution": "A folded napkin",
     "creative_solution": "A phone case",
     "implausible_solution": "",
-    "ai_implausible_failed": "A slice of bread"
+    "ai_implausible_failed": "A slice of bread",
+    "category": "makeshift-tool"
   },
   {
     "id": 22,
@@ -133,7 +149,8 @@
     "ordinary_solution": "",
     "creative_solution": "A scarf",
     "implausible_solution": "",
-    "ai_implausible_failed": "Aluminum foil"
+    "ai_implausible_failed": "Aluminum foil",
+    "category": "makeshift-tool"
   },
   {
     "id": 23,
@@ -141,7 +158,8 @@
     "ordinary_solution": "A lint roller",
     "creative_solution": "A rubber glove",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hand"
+    "ai_implausible_failed": "Your hand",
+    "category": "cleaning-removal"
   },
   {
     "id": 24,
@@ -149,7 +167,8 @@
     "ordinary_solution": "A bag hook",
     "creative_solution": "The chair",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of string"
+    "ai_implausible_failed": "A piece of string",
+    "category": "support-stabilization"
   },
   {
     "id": 25,
@@ -157,7 +176,8 @@
     "ordinary_solution": "Your hand",
     "creative_solution": "A napkin",
     "implausible_solution": "",
-    "ai_implausible_failed": "A leaf"
+    "ai_implausible_failed": "A leaf",
+    "category": "makeshift-tool"
   },
   {
     "id": 26,
@@ -165,7 +185,8 @@
     "ordinary_solution": "Adhesive hooks",
     "creative_solution": "Mounting putty",
     "implausible_solution": "",
-    "ai_implausible_failed": "Double-sided tape"
+    "ai_implausible_failed": "Double-sided tape",
+    "category": "attachment-fastening"
   },
   {
     "id": 27,
@@ -173,7 +194,8 @@
     "ordinary_solution": "A spring clip",
     "creative_solution": "piece of tape",
     "implausible_solution": "",
-    "ai_implausible_failed": "A heavy book"
+    "ai_implausible_failed": "A heavy book",
+    "category": "grip-friction"
   },
   {
     "id": 28,
@@ -181,7 +203,8 @@
     "ordinary_solution": "A jacket",
     "creative_solution": "A backpack",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hands"
+    "ai_implausible_failed": "Your hands",
+    "category": "makeshift-tool"
   },
   {
     "id": 29,
@@ -189,7 +212,8 @@
     "ordinary_solution": "A napkin",
     "creative_solution": "A sleeve",
     "implausible_solution": "",
-    "ai_implausible_failed": "A second cup"
+    "ai_implausible_failed": "A second cup",
+    "category": "protection-shielding"
   },
   {
     "id": 30,
@@ -197,7 +221,8 @@
     "ordinary_solution": "A mat",
     "creative_solution": "A towel",
     "implausible_solution": "",
-    "ai_implausible_failed": "Sand"
+    "ai_implausible_failed": "Sand",
+    "category": "grip-friction"
   },
   {
     "id": 31,
@@ -205,7 +230,8 @@
     "ordinary_solution": "A cup",
     "creative_solution": "A lid",
     "implausible_solution": "",
-    "ai_implausible_failed": "A folded piece of paper"
+    "ai_implausible_failed": "A folded piece of paper",
+    "category": "makeshift-tool"
   },
   {
     "id": 32,
@@ -213,7 +239,8 @@
     "ordinary_solution": "A towel",
     "creative_solution": "A potholder",
     "implausible_solution": "",
-    "ai_implausible_failed": "Folded newspaper"
+    "ai_implausible_failed": "Folded newspaper",
+    "category": "temperature-management"
   },
   {
     "id": 33,
@@ -221,7 +248,8 @@
     "ordinary_solution": "A mug",
     "creative_solution": "A spoon",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hand"
+    "ai_implausible_failed": "Your hand",
+    "category": "makeshift-tool"
   },
   {
     "id": 34,
@@ -229,7 +257,8 @@
     "ordinary_solution": "Clips",
     "creative_solution": "Weights",
     "implausible_solution": "",
-    "ai_implausible_failed": "Rocks"
+    "ai_implausible_failed": "Rocks",
+    "category": "containment-closure"
   },
   {
     "id": 36,
@@ -237,7 +266,8 @@
     "ordinary_solution": "Rug tape",
     "creative_solution": "Furniture",
     "implausible_solution": "",
-    "ai_implausible_failed": "A heavy book"
+    "ai_implausible_failed": "A heavy book",
+    "category": "grip-friction"
   },
   {
     "id": 37,
@@ -245,7 +275,8 @@
     "ordinary_solution": "A plastic bag",
     "creative_solution": "A shower cap",
     "implausible_solution": "",
-    "ai_implausible_failed": "A towel"
+    "ai_implausible_failed": "A towel",
+    "category": "containment-closure"
   },
   {
     "id": 38,
@@ -253,7 +284,8 @@
     "ordinary_solution": "An eraser",
     "creative_solution": "A tennis ball",
     "implausible_solution": "",
-    "ai_implausible_failed": "Toothpaste"
+    "ai_implausible_failed": "Toothpaste",
+    "category": "cleaning-removal"
   },
   {
     "id": 39,
@@ -261,7 +293,8 @@
     "ordinary_solution": "The can tab",
     "creative_solution": "A clothespin",
     "implausible_solution": "",
-    "ai_implausible_failed": "A heavy spoon"
+    "ai_implausible_failed": "A heavy spoon",
+    "category": "grip-friction"
   },
   {
     "id": 40,
@@ -269,7 +302,8 @@
     "ordinary_solution": "Pliers",
     "creative_solution": "A potato",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "separation-extraction"
   },
   {
     "id": 41,
@@ -277,7 +311,8 @@
     "ordinary_solution": "Folded foil",
     "creative_solution": "A spring",
     "implausible_solution": "",
-    "ai_implausible_failed": "A small coin"
+    "ai_implausible_failed": "A small coin",
+    "category": "attachment-fastening"
   },
   {
     "id": 42,
@@ -285,7 +320,8 @@
     "ordinary_solution": "A case",
     "creative_solution": "A sock",
     "implausible_solution": "",
-    "ai_implausible_failed": "Plastic wrap"
+    "ai_implausible_failed": "Plastic wrap",
+    "category": "protection-shielding"
   },
   {
     "id": 43,
@@ -293,7 +329,8 @@
     "ordinary_solution": "A needle",
     "creative_solution": "A bobby pin",
     "implausible_solution": "",
-    "ai_implausible_failed": "A paperclip"
+    "ai_implausible_failed": "A paperclip",
+    "category": "attachment-fastening"
   },
   {
     "id": 45,
@@ -301,7 +338,8 @@
     "ordinary_solution": "A knot",
     "creative_solution": "large rubber band",
     "implausible_solution": "",
-    "ai_implausible_failed": "Spring clips"
+    "ai_implausible_failed": "Spring clips",
+    "category": "grip-friction"
   },
   {
     "id": 46,
@@ -309,7 +347,8 @@
     "ordinary_solution": "A book",
     "creative_solution": "Bottle caps",
     "implausible_solution": "",
-    "ai_implausible_failed": "Two erasers"
+    "ai_implausible_failed": "Two erasers",
+    "category": "support-stabilization"
   },
   {
     "id": 47,
@@ -317,7 +356,8 @@
     "ordinary_solution": "Freeze it",
     "creative_solution": "Heat it",
     "implausible_solution": "",
-    "ai_implausible_failed": "Boiling water"
+    "ai_implausible_failed": "Boiling water",
+    "category": "separation-extraction"
   },
   {
     "id": 48,
@@ -325,7 +365,8 @@
     "ordinary_solution": "A water moat",
     "creative_solution": "A chalk line",
     "implausible_solution": "",
-    "ai_implausible_failed": "Petroleum jelly"
+    "ai_implausible_failed": "Petroleum jelly",
+    "category": "protection-shielding"
   },
   {
     "id": 49,
@@ -333,7 +374,8 @@
     "ordinary_solution": "A small bag",
     "creative_solution": "A straw",
     "implausible_solution": "",
-    "ai_implausible_failed": "A toilet paper roll"
+    "ai_implausible_failed": "A toilet paper roll",
+    "category": "containment-closure"
   },
   {
     "id": 51,
@@ -341,7 +383,8 @@
     "ordinary_solution": "A double knot",
     "creative_solution": "Tuck them in",
     "implausible_solution": "",
-    "ai_implausible_failed": "A drop of glue"
+    "ai_implausible_failed": "A drop of glue",
+    "category": "grip-friction"
   },
   {
     "id": 52,
@@ -349,7 +392,8 @@
     "ordinary_solution": "stack of books",
     "creative_solution": "Hanging",
     "implausible_solution": "",
-    "ai_implausible_failed": "A bottle"
+    "ai_implausible_failed": "A bottle",
+    "category": "makeshift-tool"
   },
   {
     "id": 54,
@@ -357,7 +401,8 @@
     "ordinary_solution": "A towel",
     "creative_solution": "Baby powder",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hand"
+    "ai_implausible_failed": "Your hand",
+    "category": "cleaning-removal"
   },
   {
     "id": 55,
@@ -365,7 +410,8 @@
     "ordinary_solution": "Zip ties",
     "creative_solution": "Spring clips",
     "implausible_solution": "",
-    "ai_implausible_failed": "Toilet paper rolls"
+    "ai_implausible_failed": "Toilet paper rolls",
+    "category": "containment-closure"
   },
   {
     "id": 56,
@@ -373,7 +419,8 @@
     "ordinary_solution": "Two sticks",
     "creative_solution": "A comb",
     "implausible_solution": "",
-    "ai_implausible_failed": "A paperclip"
+    "ai_implausible_failed": "A paperclip",
+    "category": "makeshift-tool"
   },
   {
     "id": 57,
@@ -381,7 +428,8 @@
     "ordinary_solution": "Weather stripping",
     "creative_solution": "A cardboard wedge",
     "implausible_solution": "",
-    "ai_implausible_failed": "A rolled sock"
+    "ai_implausible_failed": "A rolled sock",
+    "category": "support-stabilization"
   },
   {
     "id": 58,
@@ -389,7 +437,8 @@
     "ordinary_solution": "A stand",
     "creative_solution": "A book",
     "implausible_solution": "",
-    "ai_implausible_failed": "A coffee mug"
+    "ai_implausible_failed": "A coffee mug",
+    "category": "support-stabilization"
   },
   {
     "id": 60,
@@ -397,7 +446,8 @@
     "ordinary_solution": "A cast cover",
     "creative_solution": "A plastic bag",
     "implausible_solution": "",
-    "ai_implausible_failed": "Plastic wrap"
+    "ai_implausible_failed": "Plastic wrap",
+    "category": "protection-shielding"
   },
   {
     "id": 61,
@@ -405,7 +455,8 @@
     "ordinary_solution": "A bottle brush",
     "creative_solution": "Rice",
     "implausible_solution": "",
-    "ai_implausible_failed": "Sand"
+    "ai_implausible_failed": "Sand",
+    "category": "cleaning-removal"
   },
   {
     "id": 62,
@@ -413,7 +464,8 @@
     "ordinary_solution": "A wallet",
     "creative_solution": "Play dough",
     "implausible_solution": "",
-    "ai_implausible_failed": "A spring clip"
+    "ai_implausible_failed": "A spring clip",
+    "category": "support-stabilization"
   },
   {
     "id": 63,
@@ -421,7 +473,8 @@
     "ordinary_solution": "Cooking spray",
     "creative_solution": "Freeze the cheese",
     "implausible_solution": "",
-    "ai_implausible_failed": "Flour"
+    "ai_implausible_failed": "Flour",
+    "category": "grip-friction"
   },
   {
     "id": 65,
@@ -429,7 +482,8 @@
     "ordinary_solution": "Blotter paper",
     "creative_solution": "A tissue",
     "implausible_solution": "",
-    "ai_implausible_failed": "Hairspray"
+    "ai_implausible_failed": "Hairspray",
+    "category": "protection-shielding"
   },
   {
     "id": 66,
@@ -437,7 +491,8 @@
     "ordinary_solution": "A dryer sheet",
     "creative_solution": "A cotton ball",
     "implausible_solution": "",
-    "ai_implausible_failed": "A tea bag"
+    "ai_implausible_failed": "A tea bag",
+    "category": "makeshift-tool"
   },
   {
     "id": 67,
@@ -445,7 +500,8 @@
     "ordinary_solution": "A folder",
     "creative_solution": "A book",
     "implausible_solution": "",
-    "ai_implausible_failed": "A rolled tube"
+    "ai_implausible_failed": "A rolled tube",
+    "category": "containment-closure"
   },
   {
     "id": 72,
@@ -453,7 +509,8 @@
     "ordinary_solution": "Tilt your head",
     "creative_solution": "Hair dryer",
     "implausible_solution": "",
-    "ai_implausible_failed": "A cotton swab"
+    "ai_implausible_failed": "A cotton swab",
+    "category": "reaching-retrieval"
   },
   {
     "id": 73,
@@ -461,7 +518,8 @@
     "ordinary_solution": "A spoon",
     "creative_solution": "A bottle cap",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your cupped hand"
+    "ai_implausible_failed": "Your cupped hand",
+    "category": "makeshift-tool"
   },
   {
     "id": 75,
@@ -469,7 +527,8 @@
     "ordinary_solution": "A toothpick",
     "creative_solution": "A tiny piece",
     "implausible_solution": "",
-    "ai_implausible_failed": "A small piece of paper"
+    "ai_implausible_failed": "A small piece of paper",
+    "category": "attachment-fastening"
   },
   {
     "id": 76,
@@ -477,7 +536,8 @@
     "ordinary_solution": "Compressed air",
     "creative_solution": "A brush",
     "implausible_solution": "",
-    "ai_implausible_failed": "A sticky note"
+    "ai_implausible_failed": "A sticky note",
+    "category": "cleaning-removal"
   },
   {
     "id": 77,
@@ -485,7 +545,8 @@
     "ordinary_solution": "Oil",
     "creative_solution": "A hairdryer",
     "implausible_solution": "",
-    "ai_implausible_failed": "An eraser"
+    "ai_implausible_failed": "An eraser",
+    "category": "cleaning-removal"
   },
   {
     "id": 78,
@@ -493,7 +554,8 @@
     "ordinary_solution": "The shell",
     "creative_solution": "A plastic bottle",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hands"
+    "ai_implausible_failed": "Your hands",
+    "category": "separation-extraction"
   },
   {
     "id": 79,
@@ -501,7 +563,8 @@
     "ordinary_solution": "Masking tape",
     "creative_solution": "Petroleum jelly",
     "implausible_solution": "",
-    "ai_implausible_failed": "Lip balm"
+    "ai_implausible_failed": "Lip balm",
+    "category": "protection-shielding"
   },
   {
     "id": 80,
@@ -509,7 +572,8 @@
     "ordinary_solution": "A wick system",
     "creative_solution": "An inverted bottle",
     "implausible_solution": "",
-    "ai_implausible_failed": "A plastic bag"
+    "ai_implausible_failed": "A plastic bag",
+    "category": "temperature-management"
   },
   {
     "id": 84,
@@ -517,7 +581,8 @@
     "ordinary_solution": "A needle",
     "creative_solution": "Tape",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of glue"
+    "ai_implausible_failed": "A piece of glue",
+    "category": "separation-extraction"
   },
   {
     "id": 85,
@@ -525,7 +590,8 @@
     "ordinary_solution": "Soap",
     "creative_solution": "Dental floss",
     "implausible_solution": "",
-    "ai_implausible_failed": "Butter"
+    "ai_implausible_failed": "Butter",
+    "category": "separation-extraction"
   },
   {
     "id": 88,
@@ -533,7 +599,8 @@
     "ordinary_solution": "Boil it",
     "creative_solution": "A cloth",
     "implausible_solution": "",
-    "ai_implausible_failed": "A coffee filter"
+    "ai_implausible_failed": "A coffee filter",
+    "category": "separation-extraction"
   },
   {
     "id": 92,
@@ -541,7 +608,8 @@
     "ordinary_solution": "A hose reel",
     "creative_solution": "A spring guard",
     "implausible_solution": "",
-    "ai_implausible_failed": "A straight path"
+    "ai_implausible_failed": "A straight path",
+    "category": "containment-closure"
   },
   {
     "id": 94,
@@ -549,7 +617,8 @@
     "ordinary_solution": "A sand anchor",
     "creative_solution": "A heavy bag",
     "implausible_solution": "",
-    "ai_implausible_failed": "A deep hole"
+    "ai_implausible_failed": "A deep hole",
+    "category": "support-stabilization"
   },
   {
     "id": 95,
@@ -557,7 +626,8 @@
     "ordinary_solution": "A sunshade",
     "creative_solution": "Cracked windows",
     "implausible_solution": "",
-    "ai_implausible_failed": "A wet towel"
+    "ai_implausible_failed": "A wet towel",
+    "category": "temperature-management"
   },
   {
     "id": 98,
@@ -565,7 +635,8 @@
     "ordinary_solution": "Oil",
     "creative_solution": "Warm water",
     "implausible_solution": "",
-    "ai_implausible_failed": "Alcohol"
+    "ai_implausible_failed": "Alcohol",
+    "category": "separation-extraction"
   },
   {
     "id": 99,
@@ -573,7 +644,8 @@
     "ordinary_solution": "Insect repellent",
     "creative_solution": "A fan",
     "implausible_solution": "",
-    "ai_implausible_failed": "A citronella candle"
+    "ai_implausible_failed": "A citronella candle",
+    "category": "protection-shielding"
   },
   {
     "id": 101,
@@ -581,7 +653,8 @@
     "ordinary_solution": "A shoe brush",
     "creative_solution": "A banana peel",
     "implausible_solution": "",
-    "ai_implausible_failed": "Butter"
+    "ai_implausible_failed": "Butter",
+    "category": "cleaning-removal"
   },
   {
     "id": 102,
@@ -589,7 +662,8 @@
     "ordinary_solution": "Plastic film",
     "creative_solution": "Bubble wrap",
     "implausible_solution": "",
-    "ai_implausible_failed": "Newspaper"
+    "ai_implausible_failed": "Newspaper",
+    "category": "protection-shielding"
   },
   {
     "id": 103,
@@ -597,7 +671,8 @@
     "ordinary_solution": "Bookends",
     "creative_solution": "A heavy object",
     "implausible_solution": "",
-    "ai_implausible_failed": "A pillow"
+    "ai_implausible_failed": "A pillow",
+    "category": "support-stabilization"
   },
   {
     "id": 105,
@@ -605,7 +680,8 @@
     "ordinary_solution": "A container",
     "creative_solution": "A spring clip",
     "implausible_solution": "",
-    "ai_implausible_failed": "A small towel"
+    "ai_implausible_failed": "A small towel",
+    "category": "grip-friction"
   },
   {
     "id": 107,
@@ -613,7 +689,8 @@
     "ordinary_solution": "A paper plate",
     "creative_solution": "piece of foil",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of glass"
+    "ai_implausible_failed": "A piece of glass",
+    "category": "makeshift-tool"
   },
   {
     "id": 108,
@@ -621,7 +698,8 @@
     "ordinary_solution": "A silicone mat",
     "creative_solution": "A ceramic tile",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of paper"
+    "ai_implausible_failed": "A piece of paper",
+    "category": "protection-shielding"
   },
   {
     "id": 109,
@@ -629,7 +707,8 @@
     "ordinary_solution": "A rope",
     "creative_solution": "A belt",
     "implausible_solution": "",
-    "ai_implausible_failed": "A plastic bag"
+    "ai_implausible_failed": "A plastic bag",
+    "category": "containment-closure"
   },
   {
     "id": 110,
@@ -637,7 +716,8 @@
     "ordinary_solution": "A pot holder",
     "creative_solution": "wooden cutting board",
     "implausible_solution": "",
-    "ai_implausible_failed": "A folded magazine"
+    "ai_implausible_failed": "A folded magazine",
+    "category": "protection-shielding"
   },
   {
     "id": 113,
@@ -645,7 +725,8 @@
     "ordinary_solution": "Gloves",
     "creative_solution": "A rubber band",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "grip-friction"
   },
   {
     "id": 114,
@@ -653,7 +734,8 @@
     "ordinary_solution": "Rug tape",
     "creative_solution": "piece of furniture",
     "implausible_solution": "",
-    "ai_implausible_failed": "Velcro"
+    "ai_implausible_failed": "Velcro",
+    "category": "grip-friction"
   },
   {
     "id": 116,
@@ -661,7 +743,8 @@
     "ordinary_solution": "A coaster",
     "creative_solution": "A napkin",
     "implausible_solution": "",
-    "ai_implausible_failed": "A pile of salt"
+    "ai_implausible_failed": "A pile of salt",
+    "category": "grip-friction"
   },
   {
     "id": 118,
@@ -669,7 +752,8 @@
     "ordinary_solution": "Cut holes",
     "creative_solution": "loop of tape",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of string"
+    "ai_implausible_failed": "A piece of string",
+    "category": "makeshift-tool"
   },
   {
     "id": 122,
@@ -677,7 +761,8 @@
     "ordinary_solution": "Pliers",
     "creative_solution": "Sticky tape",
     "implausible_solution": "",
-    "ai_implausible_failed": "Your hand"
+    "ai_implausible_failed": "Your hand",
+    "category": "reaching-retrieval"
   },
   {
     "id": 123,
@@ -685,7 +770,8 @@
     "ordinary_solution": "A napkin",
     "creative_solution": "A koozie",
     "implausible_solution": "",
-    "ai_implausible_failed": "A sock"
+    "ai_implausible_failed": "A sock",
+    "category": "temperature-management"
   },
   {
     "id": 126,
@@ -693,7 +779,8 @@
     "ordinary_solution": "Felt pads",
     "creative_solution": "Socks",
     "implausible_solution": "",
-    "ai_implausible_failed": "Pieces of tape"
+    "ai_implausible_failed": "Pieces of tape",
+    "category": "grip-friction"
   },
   {
     "id": 130,
@@ -701,7 +788,8 @@
     "ordinary_solution": "Tooth brush",
     "creative_solution": "A sponge",
     "implausible_solution": "",
-    "ai_implausible_failed": "A bundle of grass"
+    "ai_implausible_failed": "A bundle of grass",
+    "category": "makeshift-tool"
   },
   {
     "id": 133,
@@ -709,7 +797,8 @@
     "ordinary_solution": "Tape",
     "creative_solution": "A lighter",
     "implausible_solution": "",
-    "ai_implausible_failed": "A knot"
+    "ai_implausible_failed": "A knot",
+    "category": "containment-closure"
   },
   {
     "id": 138,
@@ -717,7 +806,8 @@
     "ordinary_solution": "A tie clip",
     "creative_solution": "A safety pin",
     "implausible_solution": "",
-    "ai_implausible_failed": "Tape"
+    "ai_implausible_failed": "Tape",
+    "category": "containment-closure"
   },
   {
     "id": 139,
@@ -725,7 +815,8 @@
     "ordinary_solution": "A small cut",
     "creative_solution": "A rubber band",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "containment-closure"
   },
   {
     "id": 143,
@@ -733,7 +824,8 @@
     "ordinary_solution": "A safety pin",
     "creative_solution": "An iron-on patch",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "attachment-fastening"
   },
   {
     "id": 148,
@@ -741,7 +833,8 @@
     "ordinary_solution": "Squeeze from bottom",
     "creative_solution": "A clip",
     "implausible_solution": "",
-    "ai_implausible_failed": "Cut the tube"
+    "ai_implausible_failed": "Cut the tube",
+    "category": "reaching-retrieval"
   },
   {
     "id": 178,
@@ -749,7 +842,8 @@
     "ordinary_solution": "A cart",
     "creative_solution": "A strap",
     "implausible_solution": "",
-    "ai_implausible_failed": "A second person"
+    "ai_implausible_failed": "A second person",
+    "category": "grip-friction"
   },
   {
     "id": 179,
@@ -757,7 +851,8 @@
     "ordinary_solution": "A hammer",
     "creative_solution": "Pliers",
     "implausible_solution": "",
-    "ai_implausible_failed": "A door hinge"
+    "ai_implausible_failed": "A door hinge",
+    "category": "makeshift-tool"
   },
   {
     "id": 186,
@@ -765,7 +860,8 @@
     "ordinary_solution": "Lubricating oil",
     "creative_solution": "Petroleum jelly",
     "implausible_solution": "",
-    "ai_implausible_failed": "Butter"
+    "ai_implausible_failed": "Butter",
+    "category": "cleaning-removal"
   },
   {
     "id": 189,
@@ -773,7 +869,8 @@
     "ordinary_solution": "Mounting putty",
     "creative_solution": "piece of clay",
     "implausible_solution": "",
-    "ai_implausible_failed": "A drop of glue"
+    "ai_implausible_failed": "A drop of glue",
+    "category": "support-stabilization"
   },
   {
     "id": 190,
@@ -781,7 +878,8 @@
     "ordinary_solution": "A yogurt cup",
     "creative_solution": "A cut bottle",
     "implausible_solution": "",
-    "ai_implausible_failed": "A paper bag"
+    "ai_implausible_failed": "A paper bag",
+    "category": "makeshift-tool"
   },
   {
     "id": 191,
@@ -789,7 +887,8 @@
     "ordinary_solution": "A dolly",
     "creative_solution": "Furniture sliders",
     "implausible_solution": "",
-    "ai_implausible_failed": "A lever (like a board)"
+    "ai_implausible_failed": "A lever (like a board)",
+    "category": "reaching-retrieval"
   },
   {
     "id": 193,
@@ -797,7 +896,8 @@
     "ordinary_solution": "Tape",
     "creative_solution": "A spring clip",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of string"
+    "ai_implausible_failed": "A piece of string",
+    "category": "grip-friction"
   },
   {
     "id": 199,
@@ -805,7 +905,8 @@
     "ordinary_solution": "A rubber band",
     "creative_solution": "A towel",
     "implausible_solution": "",
-    "ai_implausible_failed": "A glove"
+    "ai_implausible_failed": "A glove",
+    "category": "grip-friction"
   },
   {
     "id": 203,
@@ -813,7 +914,8 @@
     "ordinary_solution": "A sponge",
     "creative_solution": "A stick",
     "implausible_solution": "",
-    "ai_implausible_failed": "A spoon"
+    "ai_implausible_failed": "A spoon",
+    "category": "cleaning-removal"
   },
   {
     "id": 205,
@@ -821,7 +923,8 @@
     "ordinary_solution": "A jar",
     "creative_solution": "ice cube tray",
     "implausible_solution": "",
-    "ai_implausible_failed": "An envelope"
+    "ai_implausible_failed": "An envelope",
+    "category": "containment-closure"
   },
   {
     "id": 208,
@@ -829,7 +932,8 @@
     "ordinary_solution": "A shoelace",
     "creative_solution": "A safety pin",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of string"
+    "ai_implausible_failed": "A piece of string",
+    "category": "containment-closure"
   },
   {
     "id": 209,
@@ -837,7 +941,8 @@
     "ordinary_solution": "piece of paper",
     "creative_solution": "A t-shirt",
     "implausible_solution": "",
-    "ai_implausible_failed": "A plastic bowl"
+    "ai_implausible_failed": "A plastic bowl",
+    "category": "makeshift-tool"
   },
   {
     "id": 211,
@@ -845,7 +950,8 @@
     "ordinary_solution": "Flour",
     "creative_solution": "cold (chilled) pin",
     "implausible_solution": "",
-    "ai_implausible_failed": "Water"
+    "ai_implausible_failed": "Water",
+    "category": "grip-friction"
   },
   {
     "id": 213,
@@ -853,7 +959,8 @@
     "ordinary_solution": "A rubber band",
     "creative_solution": "A balloon",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of tape"
+    "ai_implausible_failed": "A piece of tape",
+    "category": "grip-friction"
   },
   {
     "id": 218,
@@ -861,7 +968,8 @@
     "ordinary_solution": "A wedge",
     "creative_solution": "piece of tape",
     "implausible_solution": "",
-    "ai_implausible_failed": "A piece of paper"
+    "ai_implausible_failed": "A piece of paper",
+    "category": "grip-friction"
   },
   {
     "id": 230,
@@ -869,7 +977,8 @@
     "ordinary_solution": "Tongs",
     "creative_solution": "Two spoons",
     "implausible_solution": "",
-    "ai_implausible_failed": "A towel"
+    "ai_implausible_failed": "A towel",
+    "category": "temperature-management"
   },
   {
     "id": 243,
@@ -877,7 +986,8 @@
     "ordinary_solution": "A box",
     "creative_solution": "A sturdy blanket",
     "implausible_solution": "",
-    "ai_implausible_failed": "A rope"
+    "ai_implausible_failed": "A rope",
+    "category": "containment-closure"
   },
   {
     "id": 254,
@@ -885,7 +995,8 @@
     "ordinary_solution": "A dustpan",
     "creative_solution": "A piece of",
     "implausible_solution": "",
-    "ai_implausible_failed": "A large spoon"
+    "ai_implausible_failed": "A large spoon",
+    "category": "makeshift-tool"
   },
   {
     "id": 302,
@@ -893,6 +1004,7 @@
     "ordinary_solution": "A bottle brush",
     "creative_solution": "Rice",
     "implausible_solution": "",
-    "ai_implausible_failed": "A fork"
+    "ai_implausible_failed": "A fork",
+    "category": "cleaning-removal"
   }
 ]
