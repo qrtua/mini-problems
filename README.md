@@ -125,10 +125,3 @@ python pipeline.py --n-problems 50 --cat-floor 3 --model gemini-2.5-pro-preview-
 - Solutions: exactly 2-3 words each, concrete physical objects
 - Problems must be physical, universal, knowledge-neutral
 
-## Cost Estimates
-
-| Scenario | Gemini Flash | Claude Sonnet 4.6 |
-|---|---|---|
-| 5 test runs x 50 (no solve/eval) | ~$0.14 | ~$1.02 |
-| 500 problems (full pipeline) | ~$0.78 | ~$5.49 |
-| Pessimistic (retries, more tokens) | ~$2 | ~$14 |
