@@ -4,16 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Single-file pipeline for generating, solving, and evaluating creativity mini-problems using **Gemini API**. Produces 500 semantically unique problems, each with ordinary/creative/implausible solutions. Follows the Instructions PDF spec.
+Single-file pipeline for generating, solving, and evaluating creativity mini-problems using **Gemini, Anthropic, or Grok (xAI)** APIs. Produces 500 semantically unique problems, each with ordinary/creative/implausible solutions. Follows the Instructions PDF spec.
 
 ## Commands
 
 ```bash
-# Install dependencies
-pip install google-generativeai numpy pandas sentence-transformers
+# Install dependencies (install only the SDK(s) you use)
+pip install google-generativeai numpy pandas sentence-transformers   # Gemini
+pip install anthropic                                                 # Anthropic
+pip install openai                                                    # Grok / xAI
 
-# Run pipeline
+# --- Gemini (default) ---
 export GEMINI_API_KEY=your_key
+python pipeline.py                                        # gemini-2.5-flash-preview-05-20
+python pipeline.py --model gemini-2.5-flash-preview-05-20
+
+# --- Anthropic ---
+export ANTHROPIC_API_KEY=your_key
+python pipeline.py --model claude-3-5-haiku-20241022
+
+# --- Grok / xAI ---
+export XAI_API_KEY=your_key
+python pipeline.py --model grok-3-mini
 
 # Quick test (20 problems, generation only)
 python pipeline.py --n-problems 20 --no-solve --no-evaluate
@@ -50,7 +62,7 @@ Everything is in `pipeline.py` — a single-file pipeline with 4 steps:
 4. **Step 3: Solve** — Gemini re-solves each problem without seeing original solutions
 5. **Step 4: Evaluate** — rates feasibility/novelty (1-5), flags quality issues
 
-Key classes: `Config` (all knobs), `GeminiModel` (API wrapper), `DuplicateTracker` (2-layer dedup), `CategoryBalancer` (floor + random distribution).
+Key classes: `Config` (all knobs), `LLMClient` (multi-provider API wrapper, aliased as `GeminiModel`), `DuplicateTracker` (2-layer dedup), `CategoryBalancer` (floor + random distribution).
 
 ## Configurable Parameters
 

@@ -1,10 +1,14 @@
 """
 Mini-Problems Pipeline — Generate, Solve & Evaluate
 =====================================================
-Single-file pipeline using Gemini API to produce semantically unique
-mini-problems for a creativity study.
+Single-file pipeline supporting Gemini, Anthropic, and Grok (xAI) APIs to produce
+semantically unique mini-problems for a creativity study.
 
 Key features:
+  - Multi-provider: Gemini (google-generativeai), Anthropic (forced JSON via tool-use),
+    Grok/xAI (openai SDK with json_schema response format)
+  - Auto-detects provider from model name prefix (gemini* → Gemini, claude* → Anthropic,
+    grok* → Grok)
   - Stratified example sampling (same-category + cross-category)
   - Configurable batch size (problems per API call)
   - Category balancing with minimum floor
@@ -12,14 +16,26 @@ Key features:
   - 2-step generation: problems+ordinary first, creative+implausible separate
 
 Usage:
+    # Gemini (default)
     export GEMINI_API_KEY=your_key
-    python pipeline.py                                  # defaults
-    python pipeline.py --n-problems 500                 # 500 new problems
-    python pipeline.py --batch-size 10                  # 10 per API call
-    python pipeline.py --n-same-cat 2 --n-cross-cat 3   # example injection
-    python pipeline.py --n-rejected 2                   # rejected per call
-    python pipeline.py --cat-floor 35                   # min per category
-    python pipeline.py --no-approved                    # don't include 112 in output
+    python pipeline.py                                        # defaults
+    python pipeline.py --model gemini-2.5-flash-preview-05-20
+
+    # Anthropic
+    export ANTHROPIC_API_KEY=your_key
+    python pipeline.py --model claude-3-5-haiku-20241022
+
+    # Grok / xAI
+    export XAI_API_KEY=your_key
+    python pipeline.py --model grok-3-mini
+
+    # Common options
+    python pipeline.py --n-problems 500                       # 500 new problems
+    python pipeline.py --batch-size 10                        # 10 per API call
+    python pipeline.py --n-same-cat 2 --n-cross-cat 3         # example injection
+    python pipeline.py --n-rejected 2                         # rejected per call
+    python pipeline.py --cat-floor 35                         # min per category
+    python pipeline.py --no-approved                          # don't include 112 in output
 """
 import os
 import re
@@ -34,9 +50,55 @@ from typing import List, Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-import google.generativeai as genai
 
 log = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Lazy SDK imports — install only the SDK you use
+# ---------------------------------------------------------------------------
+def _import_genai():
+    import google.generativeai as genai
+    return genai
+
+
+def _import_anthropic():
+    import anthropic
+    return anthropic
+
+
+def _import_openai():
+    import openai
+    return openai
+
+
+# ---------------------------------------------------------------------------
+# Provider detection
+# ---------------------------------------------------------------------------
+def detect_provider(model_name: str) -> str:
+    """Infer provider from model name prefix."""
+    if model_name.startswith("gemini") or model_name.startswith("models/gemini"):
+        return "gemini"
+    if model_name.startswith("claude"):
+        return "anthropic"
+    if model_name.startswith("grok"):
+        return "grok"
+    return "gemini"
+
+
+def _wrap_root_schema_as_object(schema: dict):
+    """Wrap array-root JSON schema in an object wrapper required by Anthropic/OpenAI."""
+    if schema.get("type") == "array":
+        return (
+            {
+                "type": "object",
+                "properties": {"items": schema},
+                "required": ["items"],
+                "additionalProperties": False,
+            },
+            True,
+        )
+    return schema, False
 
 CATEGORIES = [
     "grip-friction",
@@ -59,6 +121,7 @@ CATEGORIES = [
 class Config:
     api_key: str = ""
     model_name: str = "gemini-2.5-flash-preview-05-20"
+    provider: str = "gemini"
     n_problems: int = 500
     seed: int = 42
 
@@ -106,7 +169,7 @@ class Config:
 
     # --- Generation ---
     temperature: float = 0.8
-    max_output_tokens: int = 4096
+    max_output_tokens: int = 8192
 
     # --- Pipeline steps ---
     run_solve: bool = True
@@ -190,13 +253,27 @@ EVALUATE_SCHEMA = {
 }
 
 
-class GeminiModel:
+class LLMClient:
     def __init__(self, cfg: Config):
-        genai.configure(api_key=cfg.api_key)
-        self.model_name = cfg.model_name
         self.cfg = cfg
+        self.provider = cfg.provider
+        self.model_name = cfg.model_name
+        if self.provider == "gemini":
+            genai = _import_genai()
+            genai.configure(api_key=cfg.api_key)
 
-    def _make_config(self, schema: dict = None) -> genai.GenerationConfig:
+    def generate(self, system_prompt: str, user_prompt: str,
+                 schema: dict = None, retries: int = 3) -> str:
+        if self.provider == "gemini":
+            return self._generate_gemini(system_prompt, user_prompt, schema, retries)
+        if self.provider == "anthropic":
+            return self._generate_anthropic(system_prompt, user_prompt, schema, retries)
+        if self.provider == "grok":
+            return self._generate_grok(system_prompt, user_prompt, schema, retries)
+        raise ValueError(f"Unknown provider: {self.provider}")
+
+    def _generate_gemini(self, system_prompt, user_prompt, schema, retries):
+        genai = _import_genai()
         kwargs = {
             "temperature": self.cfg.temperature,
             "max_output_tokens": self.cfg.max_output_tokens,
@@ -204,12 +281,8 @@ class GeminiModel:
         }
         if schema:
             kwargs["response_schema"] = schema
-        return genai.GenerationConfig(**kwargs)
-
-    def generate(self, system_prompt: str, user_prompt: str,
-                 schema: dict = None, retries: int = 3) -> str:
+        gen_config = genai.GenerationConfig(**kwargs)
         model = genai.GenerativeModel(self.model_name, system_instruction=system_prompt)
-        gen_config = self._make_config(schema)
         for attempt in range(retries):
             try:
                 resp = model.generate_content(user_prompt, generation_config=gen_config)
@@ -220,6 +293,86 @@ class GeminiModel:
                 time.sleep(wait)
         log.error("All retries failed.")
         return ""
+
+    def _generate_anthropic(self, system_prompt, user_prompt, schema, retries):
+        anthropic_mod = _import_anthropic()
+        client = anthropic_mod.Anthropic(api_key=self.cfg.api_key)
+        if schema:
+            tool_schema, was_wrapped = _wrap_root_schema_as_object(schema)
+        else:
+            tool_schema, was_wrapped = {"type": "object", "properties": {}}, False
+        tool = {
+            "name": "emit_result",
+            "description": "Emit the structured result",
+            "input_schema": tool_schema,
+        }
+        for attempt in range(retries):
+            try:
+                resp = client.messages.create(
+                    model=self.model_name,
+                    max_tokens=self.cfg.max_output_tokens,
+                    temperature=self.cfg.temperature,
+                    system=system_prompt,
+                    messages=[{"role": "user", "content": user_prompt}],
+                    tools=[tool],
+                    tool_choice={"type": "tool", "name": "emit_result"},
+                )
+                for block in resp.content:
+                    if block.type == "tool_use" and block.name == "emit_result":
+                        payload = block.input
+                        if was_wrapped:
+                            payload = payload.get("items", payload)
+                        return json.dumps(payload)
+                return ""
+            except Exception as e:
+                wait = 2 ** attempt
+                log.warning(f"API error (attempt {attempt+1}/{retries}): {e}. Retry in {wait}s...")
+                time.sleep(wait)
+        log.error("All retries failed.")
+        return ""
+
+    def _generate_grok(self, system_prompt, user_prompt, schema, retries):
+        openai_mod = _import_openai()
+        client = openai_mod.OpenAI(api_key=self.cfg.api_key, base_url="https://api.x.ai/v1")
+        if schema:
+            wrapped_schema, was_wrapped = _wrap_root_schema_as_object(schema)
+            response_format = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "result",
+                    "strict": True,
+                    "schema": wrapped_schema,
+                },
+            }
+        else:
+            wrapped_schema, was_wrapped = None, False
+            response_format = {"type": "json_object"}
+        for attempt in range(retries):
+            try:
+                resp = client.chat.completions.create(
+                    model=self.model_name,
+                    max_tokens=self.cfg.max_output_tokens,
+                    temperature=self.cfg.temperature,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format=response_format,
+                )
+                text = resp.choices[0].message.content or ""
+                if was_wrapped:
+                    payload = json.loads(text)
+                    return json.dumps(payload.get("items", payload))
+                return text.strip()
+            except Exception as e:
+                wait = 2 ** attempt
+                log.warning(f"API error (attempt {attempt+1}/{retries}): {e}. Retry in {wait}s...")
+                time.sleep(wait)
+        log.error("All retries failed.")
+        return ""
+
+
+GeminiModel = LLMClient
 
 
 # ---------------------------------------------------------------------------
@@ -1228,14 +1381,11 @@ def run_pipeline(cfg: Config):
     # Category balancer
     balancer = CategoryBalancer(CATEGORIES, cfg.cat_floor, cfg.n_problems)
 
-    # If including approved, count them toward balancer
+    # Approved are appended to output but do NOT consume the generation budget
     approved = []
     if cfg.include_approved:
         approved = [dict(ex) for ex in examples if ex.get("ordinary_solution")]
-        balancer.seed(approved)
-        remaining = balancer.remaining()
-        log.info(f"Including {len(approved)} approved, generating {remaining} new")
-        log.info(f"  {balancer.summary()}")
+        log.info(f"Will append {len(approved)} approved to output; generating {cfg.n_problems} new")
 
     # --- STEP 1: Generate problems + ordinary ---
     new_problems, gen_rejected = step1_generate(
@@ -1313,8 +1463,12 @@ Example configurations to test:
   python pipeline.py --n-problems 50 --no-solve --no-evaluate
         """,
     )
-    parser.add_argument("--api-key", default=os.environ.get("GEMINI_API_KEY", ""))
+    parser.add_argument("--api-key", default="",
+                        help="API key (default: from GEMINI_API_KEY / ANTHROPIC_API_KEY / XAI_API_KEY)")
     parser.add_argument("--model", default="gemini-2.5-flash-preview-05-20")
+    parser.add_argument("--provider", choices=["gemini", "anthropic", "grok", "auto"],
+                        default="auto",
+                        help="LLM provider (default: auto — detected from --model prefix)")
     parser.add_argument("--n-problems", type=int, default=500)
     parser.add_argument("--output", default="generated_problems.csv")
     parser.add_argument("--seed", type=int, default=42)
@@ -1370,12 +1524,20 @@ Example configurations to test:
         datefmt="%H:%M:%S",
     )
 
-    if not args.api_key:
-        parser.error("Set GEMINI_API_KEY or use --api-key")
+    # Resolve provider (auto → detect from model name)
+    provider = args.provider if args.provider != "auto" else detect_provider(args.model)
+
+    # Pick API key: explicit flag wins, then the right env var for the provider
+    _env_map = {"gemini": "GEMINI_API_KEY", "anthropic": "ANTHROPIC_API_KEY", "grok": "XAI_API_KEY"}
+    api_key = args.api_key or os.environ.get(_env_map.get(provider, "GEMINI_API_KEY"), "")
+    if not api_key:
+        env_var = _env_map.get(provider, "GEMINI_API_KEY")
+        parser.error(f"Set {env_var} or use --api-key (provider: {provider})")
 
     cfg = Config(
-        api_key=args.api_key,
+        api_key=api_key,
         model_name=args.model,
+        provider=provider,
         n_problems=args.n_problems,
         output_path=args.output,
         seed=args.seed,

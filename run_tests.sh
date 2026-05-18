@@ -27,34 +27,34 @@ echo ""
 
 # Run A: baseline (default settings)
 echo "[A] Baseline: 2 same-cat + 3 cross-cat, batch=5"
-python pipeline.py --n-problems 50 --cat-floor 3 \
+python pipeline.py --no-approved --n-problems 50 --cat-floor 3 \
     --no-solve --no-evaluate \
     --output test_results/run_A.csv
 
 # Run B: more category anchoring
 echo "[B] More anchoring: 3 same-cat + 2 cross-cat"
-python pipeline.py --n-problems 50 --cat-floor 3 \
+python pipeline.py --no-approved --n-problems 50 --cat-floor 3 \
     --n-same-cat 3 --n-cross-cat 2 \
     --no-solve --no-evaluate \
     --output test_results/run_B.csv
 
 # Run C: larger batch size
 echo "[C] Larger batch: batch=10"
-python pipeline.py --n-problems 50 --cat-floor 3 \
+python pipeline.py --no-approved --n-problems 50 --cat-floor 3 \
     --batch-size 10 \
     --no-solve --no-evaluate \
     --output test_results/run_C.csv
 
 # Run D: minimal input
 echo "[D] Minimal input: 1 same + 2 cross + 1 rejected"
-python pipeline.py --n-problems 50 --cat-floor 3 \
+python pipeline.py --no-approved --n-problems 50 --cat-floor 3 \
     --n-same-cat 1 --n-cross-cat 2 --n-rejected 1 \
     --no-solve --no-evaluate \
     --output test_results/run_D.csv
 
 # Run E: no rejected examples
 echo "[E] No rejected: n-rejected=0"
-python pipeline.py --n-problems 50 --cat-floor 3 \
+python pipeline.py --no-approved --n-problems 50 --cat-floor 3 \
     --n-rejected 0 \
     --no-solve --no-evaluate \
     --output test_results/run_E.csv
