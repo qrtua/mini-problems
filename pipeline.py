@@ -30,7 +30,7 @@ Usage:
     python pipeline.py --model grok-3-mini
 
     # Common options
-    python pipeline.py --n-problems 500                       # 500 new problems
+    python pipeline.py --n-problems 300                       # 300 new problems
     python pipeline.py --batch-size 10                        # 10 per API call
     python pipeline.py --n-same-cat 2 --n-cross-cat 3         # example injection
     python pipeline.py --n-rejected 2                         # rejected per call
