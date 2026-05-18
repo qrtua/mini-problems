@@ -1,0 +1,2 @@
+"problem","category","reason","most_similar_to","similarity_score","similarity_type","threshold_used","ordinary_solution"
+"To drain pasta without a colander","separation-extraction","duplicate: semantic sim 0.881 >= 0.75","To drain pasta with no strainer","0.881","semantic","0.75","A pot lid"
