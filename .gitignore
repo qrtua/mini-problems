@@ -21,5 +21,8 @@ evaluated_problems.csv
 run_*.csv
 grok/
 
+# Generated rejection log
+rejected_during_generation.csv
+
 # Documents / PDFs
 *.pdf
