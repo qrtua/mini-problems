@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment / secrets
+.env
+.env.*
+
+# Pipeline output directories
+outputs/
+wandb/
+
+# Generated pipeline CSVs (any step)
+generated_problems.csv
+solved_problems.csv
+evaluated_problems.csv
+*_problems.csv
+
+# Run-result CSVs (e.g. run_E_gemini_3.5.csv, run_E_grok_4.3.csv)
+run_*.csv
+grok/
+
+# Documents / PDFs
+*.pdf

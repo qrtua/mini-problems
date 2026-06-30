@@ -1441,7 +1441,7 @@ def main():
         epilog="""
 Example configurations to test:
 
-  # Default: 5 examples (2 same-cat + 3 cross), batch of 5
+  # Default: 3 examples (2 same-cat + 3 cross), batch of 3
   python pipeline.py --n-problems 20
 
   # More same-category anchoring
@@ -1469,7 +1469,7 @@ Example configurations to test:
     parser.add_argument("--provider", choices=["gemini", "anthropic", "grok", "auto"],
                         default="auto",
                         help="LLM provider (default: auto — detected from --model prefix)")
-    parser.add_argument("--n-problems", type=int, default=500)
+    parser.add_argument("--n-problems", type=int, default=200)
     parser.add_argument("--output", default="generated_problems.csv")
     parser.add_argument("--seed", type=int, default=42)
 
@@ -1482,7 +1482,7 @@ Example configurations to test:
                         help="Rejected examples per call (default: 2)")
 
     # Batching
-    parser.add_argument("--batch-size", type=int, default=5,
+    parser.add_argument("--batch-size", type=int, default=3,
                         help="Problems generated per API call (default: 5)")
 
     # Category balancing
