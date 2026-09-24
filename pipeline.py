@@ -5,7 +5,7 @@ Single-file pipeline supporting Gemini, Anthropic, and Grok (xAI) APIs to produc
 semantically unique mini-problems for a creativity study.
 
 Key features:
-  - Multi-provider: Gemini (google-generativeai), Anthropic (forced JSON via tool-use),
+  - Multi-provider: Gemini (google-genai), Anthropic (forced JSON via tool-use),
     Grok/xAI (openai SDK with json_schema response format)
   - Auto-detects provider from model name prefix (gemini* → Gemini, claude* → Anthropic,
     grok* → Grok)
@@ -19,7 +19,7 @@ Usage:
     # Gemini (default)
     export GEMINI_API_KEY=your_key
     python pipeline.py                                        # defaults
-    python pipeline.py --model gemini-2.5-flash-preview-05-20
+    python pipeline.py --model gemini-3.5-flash
 
     # Anthropic
     export ANTHROPIC_API_KEY=your_key
@@ -58,8 +58,9 @@ log = logging.getLogger(__name__)
 # Lazy SDK imports — install only the SDK you use
 # ---------------------------------------------------------------------------
 def _import_genai():
-    import google.generativeai as genai
-    return genai
+    from google import genai
+    from google.genai import types
+    return genai, types
 
 
 def _import_anthropic():
@@ -101,16 +102,20 @@ def _wrap_root_schema_as_object(schema: dict):
     return schema, False
 
 CATEGORIES = [
-    "grip-friction",
-    "containment-closure",
-    "protection-shielding",
-    "cleaning-removal",
-    "attachment-fastening",
-    "support-stabilization",
-    "reaching-retrieval",
-    "makeshift-tool",
-    "separation-extraction",
-    "temperature-management",
+    "The Access Barrier",
+    "The Attachment Barrier",
+    "The Calibration Barrier",
+    "The Containment Barrier",
+    "The Deformation Barrier",
+    "The Friction Barrier",
+    "The Improvisation Barrier",
+    "The Moisture Barrier",
+    "The Noise Barrier",
+    "The Protection Barrier",
+    "The Separation Barrier",
+    "The Stabilization Barrier",
+    "The Temperature Barrier",
+    "The Vision Barrier",
 ]
 
 
@@ -120,7 +125,7 @@ CATEGORIES = [
 @dataclass
 class Config:
     api_key: str = ""
-    model_name: str = "gemini-2.5-flash-preview-05-20"
+    model_name: str = "gemini-3.5-flash"
     provider: str = "gemini"
     n_problems: int = 500
     seed: int = 42
@@ -137,9 +142,6 @@ class Config:
     cat_floor: int = 35          # minimum problems per category
     # Remaining (n_problems - cat_floor * n_cats) distributed randomly
 
-    # --- Include approved in output ---
-    include_approved: bool = True
-
     # --- Data paths ---
     examples_path: str = "data/examples.json"
     rejected_path: str = "data/rejected.json"
@@ -147,9 +149,13 @@ class Config:
 
     # --- Validation ---
     problem_min_words: int = 4
-    problem_max_words: int = 7
-    solution_min_words: int = 2
+    problem_max_words: int = 10
+    solution_min_words: int = 1
     solution_max_words: int = 3
+
+    # --- Novelty gate (vs approved seed + optional prior run) ---
+    ref_threshold: float = 0.65          # candidates with sim >= this to ANY seed are rejected
+    extra_reference_path: str = ""       # optional CSV of prior-run problems to also avoid
 
     # --- Diversity ---
     similarity_threshold: float = 0.75
@@ -172,6 +178,8 @@ class Config:
     max_output_tokens: int = 8192
 
     # --- Pipeline steps ---
+    run_creative: bool = True
+    run_implausible: bool = True
     run_solve: bool = True
     run_evaluate: bool = True
 
@@ -259,8 +267,8 @@ class LLMClient:
         self.provider = cfg.provider
         self.model_name = cfg.model_name
         if self.provider == "gemini":
-            genai = _import_genai()
-            genai.configure(api_key=cfg.api_key)
+            genai, _ = _import_genai()
+            self._gemini_client = genai.Client(api_key=cfg.api_key)
 
     def generate(self, system_prompt: str, user_prompt: str,
                  schema: dict = None, retries: int = 3) -> str:
@@ -273,20 +281,24 @@ class LLMClient:
         raise ValueError(f"Unknown provider: {self.provider}")
 
     def _generate_gemini(self, system_prompt, user_prompt, schema, retries):
-        genai = _import_genai()
-        kwargs = {
+        _, types = _import_genai()
+        cfg_kwargs = {
+            "system_instruction": system_prompt,
             "temperature": self.cfg.temperature,
             "max_output_tokens": self.cfg.max_output_tokens,
             "response_mime_type": "application/json",
         }
         if schema:
-            kwargs["response_schema"] = schema
-        gen_config = genai.GenerationConfig(**kwargs)
-        model = genai.GenerativeModel(self.model_name, system_instruction=system_prompt)
+            cfg_kwargs["response_schema"] = schema
+        config = types.GenerateContentConfig(**cfg_kwargs)
         for attempt in range(retries):
             try:
-                resp = model.generate_content(user_prompt, generation_config=gen_config)
-                return resp.text.strip()
+                resp = self._gemini_client.models.generate_content(
+                    model=self.model_name,
+                    contents=user_prompt,
+                    config=config,
+                )
+                return (resp.text or "").strip()
             except Exception as e:
                 wait = 2 ** attempt
                 log.warning(f"API error (attempt {attempt+1}/{retries}): {e}. Retry in {wait}s...")
@@ -404,17 +416,19 @@ def count_words(text: str) -> int:
 
 
 def validate_problem_step1(item: Dict, cfg: Config) -> List[str]:
-    """Validate problem + ordinary solution from Step 1."""
+    """Validate problem + ordinary solution from Step 1.
+
+    Relaxed rules: a leading "To" is optional (word count is taken on the part
+    after it when present), and an explicit constraint is no longer mandatory.
+    """
     issues = []
     problem = item.get("problem", "").strip()
-    if not problem.lower().startswith("to "):
-        issues.append("Must start with 'To'")
-        return issues
-    wc = count_words(problem[3:].strip())
+    if not problem:
+        return ["Empty problem"]
+    core = problem[3:].strip() if problem.lower().startswith("to ") else problem
+    wc = count_words(core)
     if not (cfg.problem_min_words <= wc <= cfg.problem_max_words):
         issues.append(f"Problem: {wc} words (need {cfg.problem_min_words}-{cfg.problem_max_words})")
-    if not item.get("constraint", "").strip():
-        issues.append("Missing constraint")
     sol = item.get("ordinary_solution", "").strip()
     if not sol:
         issues.append("Empty ordinary_solution")
@@ -597,6 +611,60 @@ class DuplicateTracker:
         }
 
 
+class ReferenceGate:
+    """
+    Novelty gate against a FIXED reference set (the approved seed, plus optionally
+    a prior run's output). Rejects any candidate that is semantically too close to
+    ANY reference problem.
+
+    Difference vs DuplicateTracker:
+      - DuplicateTracker dedups NEW problems against each other, with an adaptive
+        threshold that decays as the pool grows.
+      - ReferenceGate enforces distance from the GOLD seed, with a FIXED threshold
+        (no decay): the seed is exactly what we must NOT regenerate.
+
+    The seed is never added to the DuplicateTracker (that would inflate n and
+    suppress the adaptive threshold) — it lives only here.
+    """
+
+    def __init__(self, reference_problems: List[str], encoder, ref_threshold: float = 0.65):
+        self.ref_threshold = ref_threshold
+        self.encoder = encoder
+        self.reference_problems = [str(p).strip() for p in reference_problems if str(p).strip()]
+        self.embeddings = None
+        if self.encoder and self.reference_problems:
+            self.embeddings = self.encoder.encode(
+                self.reference_problems, normalize_embeddings=True
+            )
+            log.info(f"Novelty gate: ENABLED ({len(self.reference_problems)} refs, "
+                     f"threshold={self.ref_threshold})")
+        else:
+            log.warning("Novelty gate: DISABLED (no encoder or empty reference) — "
+                        "only exact-match protects against regenerating the seed!")
+
+    def is_too_similar(self, problem: str) -> Dict:
+        result = {
+            "is_dup": False,
+            "reason": "",
+            "most_similar_problem": "",
+            "similarity_score": 0.0,
+            "similarity_type": "reference",
+            "threshold_used": self.ref_threshold,
+        }
+        if self.embeddings is None:
+            return result
+        emb = self.encoder.encode(problem.strip(), normalize_embeddings=True)
+        sims = self.embeddings @ emb
+        max_idx = int(sims.argmax())
+        max_sim = float(sims[max_idx])
+        result["most_similar_problem"] = self.reference_problems[max_idx]
+        result["similarity_score"] = round(max_sim, 3)
+        if max_sim >= self.ref_threshold:
+            result["is_dup"] = True
+            result["reason"] = f"sim {max_sim:.3f} >= {self.ref_threshold:.2f}"
+        return result
+
+
 # ---------------------------------------------------------------------------
 # Stratified example sampling
 # ---------------------------------------------------------------------------
@@ -739,24 +807,25 @@ class CategoryBalancer:
 # ---------------------------------------------------------------------------
 STEP1_SYSTEM = (
     "You generate short, concrete real-world mini-problems for a creativity study.\n\n"
-    "EVERY problem starts with the word \"To\" followed by 4-7 more words.\n\n"
-    "STRICT RULES:\n"
-    "1. FORMAT: \"To [verb] [object/situation] [constraint]\" — e.g., \"To seal a non-sticky envelope\"\n"
-    "2. WORD COUNT: The part AFTER \"To\" must be 4-7 words. Count carefully.\n"
-    "3. CONSTRAINT RULE: Every problem MUST include exactly ONE explicit constraint word/phrase "
-    "that blocks the standard solution. Good constraints: \"non-sticky\", \"without a belt\", "
-    "\"broken\", \"no scissors\", \"missing handle\". The constraint must appear literally in the problem text.\n"
+    "Problems usually start with \"To\" (e.g., \"To seal a non-sticky envelope\"), but this is "
+    "not mandatory. Each problem is 4-10 words long.\n\n"
+    "RULES:\n"
+    "1. FORMAT: \"To [verb] [object/situation] [optional constraint]\" — the \"To\" may be dropped "
+    "if the phrasing reads naturally without it.\n"
+    "2. WORD COUNT: 4-10 words (excluding a leading \"To\" if present). Count carefully.\n"
+    "3. CONSTRAINT (encouraged, not required): where it sharpens the problem, include a constraint "
+    "that blocks the standard solution (e.g., \"non-sticky\", \"without a belt\", \"no scissors\"). "
+    "It is fine to omit it when the problem is interesting on its own.\n"
     "4. PHYSICAL ONLY: Problems must involve tangible, physical objects and actions. "
     "No abstract, social, emotional, or moral problems.\n"
     "5. UNIVERSAL: No brand names, no regional products, no specialized knowledge. "
     "Any adult worldwide should understand.\n\n"
-    "CRITICAL — AVOID THESE COMMON MISTAKES:\n"
+    "CRITICAL — AVOID THIS COMMON MISTAKE:\n"
     "- NO KNOWLEDGE-BASED PROBLEMS: Do NOT generate problems whose solutions rely on memorized "
-    "tricks, life-hacks, or specialized know-how.\n"
-    "- NO MISSING CONSTRAINTS: Every problem MUST have a constraint.\n\n"
+    "tricks, life-hacks, or specialized know-how.\n\n"
     "ORDINARY SOLUTION RULES:\n"
     "- The most common, first-thing-anyone-would-think-of solution.\n"
-    "- Must be EXACTLY 2-3 words.\n"
+    "- Must be 1-3 words.\n"
     "- Must be a concrete physical object or action.\n\n"
     "You MUST respond with ONLY a valid JSON array. No explanation, no markdown."
 )
@@ -771,17 +840,16 @@ STEP1_USER = (
     "- Use different objects and situations\n"
     "- Use different types of constraints\n\n"
     "Before outputting, CHECK each problem:\n"
-    "1. Does it have an explicit constraint word? If NO → rewrite it.\n"
-    "2. Could someone solve it by just remembering a life-hack? If YES → discard and make a new one.\n"
-    "3. Does it involve physical objects and actions? If NO → discard.\n"
-    "4. Is the ordinary solution EXACTLY 2-3 words? If NO → fix it.\n\n"
+    "1. Could someone solve it by just remembering a life-hack? If YES → discard and make a new one.\n"
+    "2. Does it involve physical objects and actions? If NO → discard.\n"
+    "3. Is the ordinary solution 1-3 words? If NO → fix it.\n\n"
     "{exclusion_text}"
     "Respond with a JSON array of {batch_size} items. Each item:\n"
     "{{\n"
-    "  \"problem\": \"To ... (4-7 words after To)\",\n"
+    "  \"problem\": \"the problem (4-10 words; a leading 'To' is optional)\",\n"
     "  \"constraint\": \"the specific constraint word/phrase in the problem\",\n"
     "  \"category\": \"{target_category}\",\n"
-    "  \"ordinary_solution\": \"2-3 word common solution\"\n"
+    "  \"ordinary_solution\": \"1-3 word common solution\"\n"
     "}}"
 )
 
@@ -908,13 +976,19 @@ EVALUATE_USER = (
 # Formatting helpers
 # ---------------------------------------------------------------------------
 def format_examples_step1(examples: List[Dict]) -> str:
-    """Format examples for Step 1 (problem + ordinary only)."""
+    """Format examples for Step 1. Shows the problem and its category.
+    Ordinary solution is shown only when present (the approved seed is a bank of
+    problems+categories without solutions, so most examples have none)."""
     lines = []
     for i, ex in enumerate(examples, 1):
-        lines.append(
-            f"{i}. \"{ex['problem']}\"\n"
-            f"   Ordinary solution: \"{ex.get('ordinary_solution', '')}\""
-        )
+        line = f"{i}. \"{ex['problem']}\""
+        cat = ex.get("category", "").strip()
+        if cat and cat != "Other":
+            line += f"  [{cat}]"
+        ord_sol = ex.get("ordinary_solution", "").strip()
+        if ord_sol:
+            line += f"\n   Ordinary solution: \"{ord_sol}\""
+        lines.append(line)
     return "\n\n".join(lines)
 
 
@@ -950,6 +1024,7 @@ def step1_generate(
     cfg: Config,
     dedup: DuplicateTracker,
     balancer: CategoryBalancer,
+    ref_gate: "ReferenceGate" = None,
 ) -> Tuple[List[Dict], List[Dict]]:
     """
     Generate problems in batches with:
@@ -1084,6 +1159,27 @@ def step1_generate(
                 })
                 log.info(f"    DUPLICATE (approved): \"{problem_text}\"")
                 continue
+
+            # Novelty gate: reject if semantically too close to the approved seed
+            # (or a prior run's output). This is what makes the batch "completely new".
+            if ref_gate is not None:
+                ref_check = ref_gate.is_too_similar(problem_text)
+                if ref_check["is_dup"]:
+                    duplicate_count += 1
+                    recent_outcomes.append(False)
+                    all_rejected.append({
+                        "problem": problem_text,
+                        "category": target_cat,
+                        "reason": f"too close to seed: {ref_check['reason']}",
+                        "most_similar_to": ref_check["most_similar_problem"],
+                        "similarity_score": ref_check["similarity_score"],
+                        "similarity_type": "reference",
+                        "threshold_used": ref_check["threshold_used"],
+                        "ordinary_solution": item.get("ordinary_solution", ""),
+                    })
+                    log.info(f"    TOO CLOSE TO SEED: \"{problem_text}\" — {ref_check['reason']}")
+                    log.info(f"      ↳ similar to seed: \"{ref_check['most_similar_problem']}\"")
+                    continue
 
             # Dedup: then check against other new problems (keyword + semantic)
             dup_check = dedup.is_duplicate(problem_text)
@@ -1378,18 +1474,26 @@ def run_pipeline(cfg: Config):
         cfg.similarity_step, cfg.embed_model,
     )
 
+    # Novelty gate: candidates must be semantically FAR from the approved seed
+    # (and optionally from a prior run's output). Fixed threshold, no decay.
+    reference_problems = [ex["problem"] for ex in examples if ex.get("problem")]
+    if cfg.extra_reference_path and os.path.exists(cfg.extra_reference_path):
+        prior = pd.read_csv(cfg.extra_reference_path)
+        prior_probs = [str(p) for p in prior.get("problem", []) if str(p).strip()]
+        reference_problems += prior_probs
+        log.info(f"Novelty reference: {len(examples)} seed + {len(prior_probs)} prior "
+                 f"= {len(reference_problems)} total")
+    else:
+        log.info(f"Novelty reference: {len(reference_problems)} seed problems")
+    ref_gate = ReferenceGate(reference_problems, dedup.encoder, cfg.ref_threshold)
+
     # Category balancer
     balancer = CategoryBalancer(CATEGORIES, cfg.cat_floor, cfg.n_problems)
 
-    # Approved are appended to output but do NOT consume the generation budget
-    approved = []
-    if cfg.include_approved:
-        approved = [dict(ex) for ex in examples if ex.get("ordinary_solution")]
-        log.info(f"Will append {len(approved)} approved to output; generating {cfg.n_problems} new")
-
     # --- STEP 1: Generate problems + ordinary ---
+    # (Approved seed is reference-only: few-shot + novelty gate, never appended to output.)
     new_problems, gen_rejected = step1_generate(
-        model, examples, rejected, cfg, dedup, balancer
+        model, examples, rejected, cfg, dedup, balancer, ref_gate
     )
 
     # Save rejected problems for analysis
@@ -1406,13 +1510,14 @@ def run_pipeline(cfg: Config):
         log.info(f"Saved {len(gen_rejected)} rejected problems to {cfg.rejected_output_path}")
 
     # --- STEP 2a: Creative solutions ---
-    new_problems = step2_creative(model, new_problems, cfg)
+    if cfg.run_creative:
+        new_problems = step2_creative(model, new_problems, cfg)
 
     # --- STEP 2b: Implausible solutions ---
-    new_problems = step2_implausible(model, new_problems, cfg)
+    if cfg.run_implausible:
+        new_problems = step2_implausible(model, new_problems, cfg)
 
-    # Combine
-    all_problems = approved + new_problems
+    all_problems = new_problems
 
     # --- STEP 3: Solve (cross-validation) ---
     if cfg.run_solve:
@@ -1465,7 +1570,7 @@ Example configurations to test:
     )
     parser.add_argument("--api-key", default="",
                         help="API key (default: from GEMINI_API_KEY / ANTHROPIC_API_KEY / XAI_API_KEY)")
-    parser.add_argument("--model", default="gemini-2.5-flash-preview-05-20")
+    parser.add_argument("--model", default="gemini-3.5-flash")
     parser.add_argument("--provider", choices=["gemini", "anthropic", "grok", "auto"],
                         default="auto",
                         help="LLM provider (default: auto — detected from --model prefix)")
@@ -1496,6 +1601,15 @@ Example configurations to test:
                         help="Lowest the threshold can drop to (default: 0.40)")
     parser.add_argument("--similarity-step", type=float, default=0.05,
                         help="Threshold drop per 100 problems (default: 0.05)")
+
+    # Novelty gate (vs approved seed)
+    parser.add_argument("--examples", default="data/examples.json",
+                        help="Path to approved seed JSON (few-shot + novelty reference)")
+    parser.add_argument("--ref-threshold", type=float, default=0.65,
+                        help="Reject candidates with semantic sim >= this to ANY seed problem (default: 0.65)")
+    parser.add_argument("--extra-reference", default="",
+                        help="Optional CSV of a prior run's problems to also stay novel against (run chaining)")
+
     parser.add_argument("--temperature", type=float, default=0.8)
 
     # Stop-loss
@@ -1506,15 +1620,17 @@ Example configurations to test:
     parser.add_argument("--stoploss-cat-streak", type=int, default=5,
                         help="Consecutive failures to skip a category (default: 5)")
 
-    # Include/exclude
-    parser.add_argument("--no-approved", action="store_true",
-                        help="Don't include 112 approved in output")
-
     # Pipeline steps
+    parser.add_argument("--no-creative", action="store_true",
+                        help="Skip creative-solution generation")
+    parser.add_argument("--no-implausible", action="store_true",
+                        help="Skip implausible-solution generation")
     parser.add_argument("--no-solve", action="store_true",
                         help="Skip the solve step")
     parser.add_argument("--no-evaluate", action="store_true",
                         help="Skip the evaluate step")
+    parser.add_argument("--problems-only", action="store_true",
+                        help="Generate only problems + ordinary (skip creative, implausible, solve, evaluate)")
 
     args = parser.parse_args()
 
@@ -1540,6 +1656,9 @@ Example configurations to test:
         provider=provider,
         n_problems=args.n_problems,
         output_path=args.output,
+        examples_path=args.examples,
+        ref_threshold=args.ref_threshold,
+        extra_reference_path=args.extra_reference,
         seed=args.seed,
         n_same_cat=args.n_same_cat,
         n_cross_cat=args.n_cross_cat,
@@ -1553,9 +1672,10 @@ Example configurations to test:
         stoploss_window=args.stoploss_window,
         stoploss_min_accepted=args.stoploss_min_accepted,
         stoploss_cat_streak=args.stoploss_cat_streak,
-        include_approved=not args.no_approved,
-        run_solve=not args.no_solve,
-        run_evaluate=not args.no_evaluate,
+        run_creative=not (args.no_creative or args.problems_only),
+        run_implausible=not (args.no_implausible or args.problems_only),
+        run_solve=not (args.no_solve or args.problems_only),
+        run_evaluate=not (args.no_evaluate or args.problems_only),
     )
     run_pipeline(cfg)
 
