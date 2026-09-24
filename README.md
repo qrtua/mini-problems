@@ -1,56 +1,133 @@
 # Mini-Problems Pipeline
 
-Single-file pipeline for generating, solving, and evaluating creativity mini-problems using the **Gemini API**. Produces up to 500 semantically unique problems, each with ordinary/creative/implausible solutions.
+Single-file pipeline for generating, solving, and evaluating short creativity
+"mini-problems" for a research study. Each problem gets three solutions —
+**ordinary** (common & appropriate), **creative** (novel & appropriate), and
+**implausible** (novel but inappropriate).
+
+The pipeline is **multi-provider**: it runs on **Gemini** (`google-genai`),
+**Anthropic** (Claude), or **Grok / xAI**, auto-detected from the model name.
 
 ## Quick Start
 
 ```bash
-pip install google-generativeai numpy pandas sentence-transformers
-export GEMINI_API_KEY=your_key
+# Install the SDK for the provider you use (plus the shared deps)
+pip install google-genai numpy pandas sentence-transformers
+# optional, only if you use those providers:
+# pip install anthropic        # Claude
+# pip install openai           # Grok / xAI
 
-# Quick test (20 problems, generation only)
-python pipeline.py --n-problems 20 --no-solve --no-evaluate
+export GEMINI_API_KEY=your_key        # or ANTHROPIC_API_KEY / XAI_API_KEY
 
-# Full run (500 problems)
-python pipeline.py --n-problems 500 --cat-floor 35 --batch-size 10
+# Quick test — problems + ordinary solutions only
+python pipeline.py --examples data/approved.json --n-problems 20 --problems-only
 
-# Run test suite (5 configurations x 50 problems)
-bash run_tests.sh
+# Generate against a seed, staying novel vs that seed
+python pipeline.py --examples data/approved.json --n-problems 100 \
+    --ref-threshold 0.65 --problems-only --output run_1.csv
+
+# Full pipeline (generate → solve → evaluate)
+python pipeline.py --examples data/approved.json --n-problems 200 --cat-floor 6
 ```
+
+> **Note:** `sentence-transformers` is required for the semantic novelty gate
+> and deduplication. Without it both silently disable and only exact-match
+> protection remains — check the startup log for `Novelty gate: ENABLED`.
+
+## Providers
+
+The provider is auto-detected from the model name (override with `--provider`):
+
+| Model prefix | Provider | SDK | Key |
+|---|---|---|---|
+| `gemini*` | Gemini | `google-genai` | `GEMINI_API_KEY` |
+| `claude*` | Anthropic | `anthropic` | `ANTHROPIC_API_KEY` |
+| `grok*` | Grok / xAI | `openai` | `XAI_API_KEY` |
+
+Default model: **`gemini-3.5-flash`**.
 
 ## Architecture
 
-Everything is in `pipeline.py` — four steps:
+Everything lives in `pipeline.py`:
 
-1. **Step 1: Generate** — problems + ordinary solutions in batches with stratified example sampling, category balancing, deduplication, and stop-loss
-2. **Step 2a/2b: Creative & Implausible** — generated separately to prevent contamination between solution types
-3. **Step 3: Solve** — model re-solves each problem without seeing original solutions (cross-validation)
-4. **Step 4: Evaluate** — rates feasibility/novelty (1-5) and flags quality issues
+1. **Step 1 — Generate**: problems + ordinary solutions, in small batches, with
+   stratified example sampling, category balancing, a novelty gate, deduplication,
+   and two-level stop-loss.
+2. **Step 2a / 2b — Creative & Implausible**: generated separately from the
+   problem to prevent contamination between solution types.
+3. **Step 3 — Solve**: a model re-solves each problem *without* seeing the
+   original solutions (enables cross-model testing).
+4. **Step 4 — Evaluate**: rates feasibility and novelty (1–5) per solution and
+   flags quality issues.
 
-## 10 Categories
+Data flows through CSV files between steps.
 
-Categories describe problem domains (what needs solving), not solution mechanisms:
+## Novelty & Diversity
 
-| Category | Description | Approved examples |
-|---|---|---|
-| grip-friction | Getting grip, preventing sliding/slipping/rolling | 20 |
-| makeshift-tool | Creating improvised tools/objects | 19 |
-| containment-closure | Keeping things closed, together, bundled | 14 |
-| protection-shielding | Blocking damage, weather, heat, insects | 13 |
-| support-stabilization | Propping, standing, preventing tipping | 10 |
-| cleaning-removal | Removing substances, stains, cleaning | 10 |
-| attachment-fastening | Connecting, securing, sealing, patching | 8 |
-| separation-extraction | Separating stuck things, filtering | 7 |
-| reaching-retrieval | Accessing hard-to-reach things, extracting | 6 |
-| temperature-management | Insulating, cooling, handling hot/cold | 5 |
+Two independent mechanisms keep output fresh:
+
+- **Novelty gate (`ReferenceGate`)** — rejects any candidate that is semantically
+  too close (cosine ≥ `--ref-threshold`, default **0.65**, *fixed* — no decay) to
+  **any** problem in the reference set. The reference set is the seed passed via
+  `--examples`, plus any prior-run output passed via `--extra-reference`. This is
+  what makes a run "completely new" relative to what already exists. The seed is
+  used as few-shot context and as this reference **only** — it is never added to
+  the output.
+- **Deduplicator** — removes near-duplicates *among the newly generated problems*:
+  keyword Jaccard (0.80) plus cosine similarity (`all-MiniLM-L6-v2`) with an
+  adaptive threshold (starts 0.75, drops 0.05 per 100 problems, floor 0.40).
+
+## Target Categories (14)
+
+Categories describe the physical *barrier* each problem is built around:
+
+`The Access` · `The Attachment` · `The Calibration` · `The Containment` ·
+`The Deformation` · `The Friction` · `The Improvisation` · `The Moisture` ·
+`The Noise` · `The Protection` · `The Separation` · `The Stabilization` ·
+`The Temperature` · `The Vision` Barrier.
+
+## Seed / examples file
+
+The pipeline needs a **seed file** of approved problems, supplied with
+`--examples` (default path `data/examples.json`). The seed is used only as the
+few-shot pool and as the novelty reference — it is never written to the output,
+so every run generates entirely new problems.
+
+It is a JSON array of objects. `problem` and `category` are required;
+`constraint` and `ordinary_solution` are optional and may be left empty:
+
+```json
+[
+  {
+    "problem": "To open a jar with a stuck lid",
+    "category": "The Access Barrier",
+    "constraint": "",
+    "ordinary_solution": ""
+  }
+]
+```
+
+`category` should be one of the 14 target categories above; any other value
+(e.g. `"Other"`) still counts for novelty and deduplication but is never used as
+a generation target. Optionally, a `data/rejected.json` file of the same shape,
+plus a `rejection_reason` field, can be supplied to show the model concrete
+failure modes to avoid (passed with `--n-rejected`).
 
 ## Configurable Parameters
 
-### Example Injection (per API call)
+### Seed & novelty
 
 | Parameter | Default | Description |
 |---|---|---|
-| `--n-same-cat` | 2 | Examples from target category (anchoring) |
+| `--examples` | `data/examples.json` | Seed JSON: few-shot pool + novelty reference |
+| `--ref-threshold` | 0.65 | Reject candidates with cosine ≥ this to any seed problem |
+| `--extra-reference` | — | CSV of a prior run's problems to also stay novel against (run chaining) |
+
+### Example injection (per API call)
+
+| Parameter | Default | Description |
+|---|---|---|
+| `--n-same-cat` | 2 | Examples from the target category (anchoring) |
 | `--n-cross-cat` | 3 | Examples from other categories (diversity) |
 | `--n-rejected` | 2 | Rejected examples, 1 per reason type |
 
@@ -58,20 +135,20 @@ Categories describe problem domains (what needs solving), not solution mechanism
 
 | Parameter | Default | Description |
 |---|---|---|
-| `--batch-size` | 5 | Problems generated per API call |
+| `--batch-size` | 2 | Problems generated per API call (small = less intra-call correlation) |
 | `--cat-floor` | 35 | Minimum problems per category |
 | `--temperature` | 0.8 | Generation temperature |
-| `--model` | gemini-2.5-flash-preview-05-20 | Model to use |
+| `--model` | gemini-3.5-flash | Model to use (provider auto-detected) |
 
-### Diversity Control
+### Diversity threshold (within-run dedup)
 
 | Parameter | Default | Description |
 |---|---|---|
-| `--similarity-threshold` | 0.75 | Starting semantic similarity threshold |
+| `--similarity-threshold` | 0.75 | Starting semantic threshold |
 | `--similarity-step` | 0.05 | Threshold drop per 100 problems |
 | `--similarity-floor` | 0.40 | Lowest the threshold can drop to |
 
-### Stop-Loss
+### Stop-loss
 
 | Parameter | Default | Description |
 |---|---|---|
@@ -79,49 +156,26 @@ Categories describe problem domains (what needs solving), not solution mechanism
 | `--stoploss-min-accepted` | 3 | Min accepted in window before stopping |
 | `--stoploss-cat-streak` | 5 | Consecutive failures to skip a category |
 
-### Pipeline Steps
+### Pipeline steps
 
 | Parameter | Description |
 |---|---|
-| `--no-solve` | Skip solve step (saves time during testing) |
-| `--no-evaluate` | Skip evaluate step |
-| `--no-approved` | Don't include 112 approved problems in output |
-
-## Test Configurations
-
-```bash
-# A: baseline
-python pipeline.py --n-problems 50 --cat-floor 3 --no-solve --no-evaluate --output run_A.csv
-
-# B: more category anchoring
-python pipeline.py --n-problems 50 --cat-floor 3 --n-same-cat 3 --n-cross-cat 2 --no-solve --no-evaluate --output run_B.csv
-
-# C: larger batches
-python pipeline.py --n-problems 50 --cat-floor 3 --batch-size 10 --no-solve --no-evaluate --output run_C.csv
-
-# D: minimal input
-python pipeline.py --n-problems 50 --cat-floor 3 --n-same-cat 1 --n-cross-cat 2 --n-rejected 1 --no-solve --no-evaluate --output run_D.csv
-
-# E: no rejected examples
-python pipeline.py --n-problems 50 --cat-floor 3 --n-rejected 0 --no-solve --no-evaluate --output run_E.csv
-
-# F: Gemini Pro (quality comparison)
-python pipeline.py --n-problems 50 --cat-floor 3 --model gemini-2.5-pro-preview-05-06 --no-solve --no-evaluate --output run_F.csv
-```
+| `--problems-only` | Only problems + ordinary (skips creative, implausible, solve, evaluate) |
+| `--no-creative` | Skip creative-solution generation |
+| `--no-implausible` | Skip implausible-solution generation |
+| `--no-solve` | Skip the solve step |
+| `--no-evaluate` | Skip the evaluate step |
 
 ## Output Files
 
-- `generated_problems.csv` — accepted problems with solutions and evaluations
-- `rejected_during_generation.csv` — every rejected problem with reason, most similar existing problem, similarity score, and threshold used
-
-## Data
-
-- `data/examples.json` — 112 human-approved problems with category assignments
-- `data/rejected.json` — 53 rejected/non-approved examples with rejection reasons
+- `generated_problems.csv` — accepted problems with solutions and evaluations.
+- `rejected_during_generation.csv` — every rejected problem with reason, most
+  similar existing problem, similarity score, and threshold used.
 
 ## Problem Format
 
-- Problem: starts with "To", 4-7 words after "To", must include one explicit constraint
-- Solutions: exactly 2-3 words each, concrete physical objects
-- Problems must be physical, universal, knowledge-neutral
-
+- **Problem**: 4–10 words; a leading "To" is optional. A constraint that blocks
+  the obvious solution is encouraged but not required, and need not appear
+  verbatim.
+- **Solutions**: 1–3 words each, a concrete physical object or action.
+- Problems must be physical, universal, and knowledge-neutral.
